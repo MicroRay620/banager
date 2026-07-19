@@ -22,7 +22,7 @@ if [ -z "$prune" ]; then
             read -r byte_choice
             chosen_prune="$size_choice$byte_choice"
     esac
-    echo -e "$bash_declare\n$bash_gen\n$dont_delete\npruning=\"$prune_denotion\"\nprune=$chosen_prune" >> "${XDG_CONFIG_HOME:-$HOME/.config}"
+    echo -e "$bash_declare\n$bash_gen\n$dont_delete\npruning=\"$prune_denotion\"\nprune=$chosen_prune" >> "${XDG_CONFIG_HOME:-$HOME/.config}/user/prune.sh"
 fi
 source "$HOME"/.config/banager/user/prune.sh
 if command -v &>/dev/null; then
