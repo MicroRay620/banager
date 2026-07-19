@@ -1,6 +1,6 @@
 #!/bin/bash
 shopt -s nullglob
-source_dir="${XDG_CONFIG_HOME:-$HOME/.config}/bash"
+source_dir="${XDG_CONFIG_HOME:-$HOME/.config}/banager"
 # Commands
 for cmd_file in "$source_dir"/commands/*; do
     if [ -f "$cmd_file" ]; then
@@ -15,4 +15,17 @@ for plugin_file in "$source_dir"/plugins/*.plugin*; do
     # shellcheck disable=SC1090
     [ -f "$plugin_file" ] && source "$plugin_file"
 done
-
+external() {
+    # shellcheck disable=SC1091
+    source -- "$(blesh-share)"/ble.sh --attach=none
+    # Uncomment which everone you want to use and have installed
+    # eval "$(thefuck --alias -l SHELL_LOGGER)"
+    # eval "$(pay-respects bash)"
+    eval "$(starship init bash)"
+    # TODO: Make a check and have it in the template nixos config for starship and zoxide working
+    if ! command -v nix &>/dev/null; then 
+        eval "$(zoxide init --cmd "cd" bash)"
+    fi
+}
+# Custom Aliases
+# You put your custom aliases below this
