@@ -12,7 +12,7 @@ mv ./banager "${XDG_CONFIG_HOME:-$HOME/.config}"
 mv "$HOME"/.bashrc "$HOME"/.bashrc.bak
 touch "$HOME"/.bashrc
 if ! grep -Fq "source -- \"${XDG_CONFIG_HOME:-$HOME/.config}/banager/config\""; then
-    echo "source -- \"${XDG_CONFIG_HOME:-$HOME/.config}/banager/config\"" >> "$HOME"/.bashrc
+    echo "source -- \"$HOME/.config/banager/config\"" >> "$HOME"/.bashrc
 fi
 echo "Checking the plugins..."
 banager_config="${XDG_CONFIG_HOME:-$HOME/.config}/banager"
