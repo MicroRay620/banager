@@ -14,4 +14,5 @@ wget -q https://codeberg.org/RubyRose/banager/raw/branch/main/install.sh &&
       rm -rf ./install.sh
 ```
 # Installing Plugins
-THIS IS WORK IN PROGRESS
+To install the plugins, you copy the `.plugin.sh`, `.plugin`, or `.plugin.bash` into the `$HOME/.config/banager/plugins/` directory. The plugin will automatically load 
+from there 
