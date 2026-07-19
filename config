@@ -1,20 +1,9 @@
 #!/bin/bash
 shopt -s nullglob
-source_dir="${XDG_CONFIG_HOME:-$HOME/.config}/banager"
-# Commands
-for cmd_file in "$source_dir"/commands/*; do
-    if [ -f "$cmd_file" ]; then
-        # shellcheck disable=SC1090
-        source "$cmd_file"
-    fi
-done
-
-# Plugins
-# This is for managing the plugins
-for plugin_file in "$source_dir"/plugins/*.plugin*; do
-    # shellcheck disable=SC1090
-    [ -f "$plugin_file" ] && source "$plugin_file"
-done
+# shellcheck disable=SC1091
+source "$HOME/.local/share/banager/deps/checks.sh"
+# Custom Aliases
+# You put your custom aliases below this
 external() {
     # shellcheck disable=SC1091
     source -- "$(blesh-share)"/ble.sh --attach=none
@@ -27,5 +16,3 @@ external() {
         eval "$(zoxide init --cmd "cd" bash)"
     fi
 }
-# Custom Aliases
-# You put your custom aliases below this
