@@ -11,8 +11,8 @@ mv ./banager/deps/ ./banager/commands/ "$HOME"/.local/share/banager
 mv ./banager "${XDG_CONFIG_HOME:-$HOME/.config}"
 mv "$HOME"/.bashrc "$HOME"/.bashrc.bak
 touch "$HOME"/.bashrc
-if ! grep "source -- \"${XDG_CONFIG_HOME:-$HOME/.config}/banager/config\""; then
-    echo -e "#!/bin/bash\nsource -- \"$HOME/.config/banager/config\"" >> "$HOME"/.bashrc
+if ! grep "source -- \"${XDG_CONFIG_HOME:-$HOME/.config}/banager/banager.conf\""; then
+    echo -e "#!/bin/bash\nsource -- \$XDG_DATA_HOME/running.sh" >> "$HOME"/.bashrc
 fi
 echo "Checking the plugins..."
 banager_config="${XDG_CONFIG_HOME:-$HOME/.config}/banager"
