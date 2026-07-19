@@ -1,7 +1,7 @@
 #!/bin/bash
 # shellcheck disable=SC1091
-source -- "$XDG_CONFIG_HOME/banager/commands/alt-command.sh"
-source -- "$XDG_CONFIG_HOME/banager/commands/package_managers.sh"
+source -- "$XDG_DATA_HOME/banager/commands/alt-command.sh"
+source -- "$XDG_DATA_HOME/banager/commands/package_managers.sh"
 alias restart="reboot"
 alias poxbash="bash --posix"
 alias shoot='$SUPER pkill'
