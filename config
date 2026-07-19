@@ -17,3 +17,7 @@ external() {
         eval "$(zoxide init --cmd "cd" bash)"
     fi
 }
+if [ "$flag_display" = true ]; then 
+    Flag 
+fi
+
