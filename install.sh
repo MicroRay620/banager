@@ -5,8 +5,12 @@ echo "Cloning in /tmp..."
 git clone https://codeberg.org/RubyRose/banager.git 
 echo "Removing dev and useless files and folders..."
 rm -rf banager/install.sh banager/docs/
-echo "Making the config file..."
+echo "Making the config and data files..."
+mkdir "$HOME"/.local/share/banager
+mv ./banager/deps/ ./banager/commands/ "$HOME"/.local/share/banager
 mv ./banager "${XDG_CONFIG_HOME:-$HOME/.config}"
+mv "$HOME"/.bashrc "$HOME"/.bashrc.bak
+touch "$HOME"/.bashrc
 if ! grep -Fq "source -- \"${XDG_CONFIG_HOME:-$HOME/.config}/banager/config\""; then
     echo "source -- \"${XDG_CONFIG_HOME:-$HOME/.config}/banager/config\"" >> "$HOME"/.bashrc
 fi
