@@ -1,6 +1,4 @@
 #!/bin/bash
-source "${XDG_CONFIG_HOME:-$HOME/.config}/banager/config"
-source "${XDG_CONFIG_HOME:-$HOME/.config}/banager/plugins/fetch.plugin.sh"
-if [ "$flag_display" = "true" ]; then
-    Flag
-fi
+source "${XDG_DATA_HOME:-$HOME/.local/share}/banager/deps/configuration.sh"
+source "${XDG_DATA_HOME:-$HOME/.local/share}/banager/deps/checks.sh"
+Flag

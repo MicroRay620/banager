@@ -1,7 +1,6 @@
 #!/bin/bash
 shopt -s nullglob
 # shellcheck disable=SC1091
-source "$HOME/.local/share/banager/deps/checks.sh"
 source "$HOME/.config/banager/banager.conf"
 # TODO: Make these not be in the config file
 if [ "$external_source" = true ]; then
@@ -22,4 +21,3 @@ fi
 if [ "$flag_display" = true ]; then 
     Flag 
 fi
-
