@@ -1,7 +1,7 @@
 #!/bin/bash
 # shellcheck disable=SC1091
-source -- "$XDG_CONFIG_HOME/bash/commands/alt-command.sh"
-source -- "$XDG_CONFIG_HOME/bash/commands/package_managers.sh"
+source -- "$XDG_CONFIG_HOME/banager/commands/alt-command.sh"
+source -- "$XDG_CONFIG_HOME/banager/commands/package_managers.sh"
 alias restart="reboot"
 alias poxbash="bash --posix"
 alias shoot='$SUPER pkill'
@@ -30,4 +30,12 @@ fi
 if command -v swww &>/dev/null; then 
     # awww is updated version of swww
     alias awww=swww
+fi
+if command -v youtube-tui &>/dev/null; then 
+    alias yt-tui="youtube-tui"
+fi
+if command -v yt-dlp &>/dev/null; then 
+    alias yt-dlp='yt-dlp -4w --no-cookies-from-browser --audio-quality 0 ' # A change for the defauult command
+    alias mp3-dl="yt-dlp --audio-format mp3" # Good for downloading mp3 files
+    alias svr-download="yt-dlp --write-info-json --write-subs --no-write-auto-subs" # This is intended for adding videos to a database/server
 fi

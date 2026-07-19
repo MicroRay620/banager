@@ -1,5 +1,5 @@
 #!/bin/bash
-enviroment_path="${XDG_CONFIG_HOME:-$HOME/.config}/bash/user/env.sh"
+enviroment_path="${XDG_CONFIG_HOME:-$HOME/.config}/banager/user/env.sh"
 if [ ! -e "$enviroment_path" ]; then 
         touch "$enviroment_path"
         bash_declare="#!/bin/bash"
