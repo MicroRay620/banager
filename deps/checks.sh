@@ -15,3 +15,4 @@ for plugin_file in "$config_dir"/plugins/*.plugin*; do
     # shellcheck disable=SC1090
     [ -f "$plugin_file" ] && source "$plugin_file"
 done
+mkdir "$config_dir/user"
