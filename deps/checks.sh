@@ -1,7 +1,9 @@
 #!/bin/bash
 config_dir="${XDG_CONFIG_HOME:-$HOME/.config}/banager"
 data_dir="${XDG_DATA_HOME:-$HOME/.local/share}/banager"
-mkdir "$config_dir/user"
+if [ ! -e "${XDG_CONFIG_HOME:-$HOME/.config}/banager/user" ]; then
+    mkdir "$config_dir/user"
+fi 
 # Commands
 for cmd_file in "$data_dir"/commands/*; do
     if [ -f "$cmd_file" ]; then

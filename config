@@ -4,6 +4,7 @@ shopt -s nullglob
 source "$HOME/.local/share/banager/deps/checks.sh"
 # Custom Aliases
 # You put your custom aliases below this
+flag_display=true
 external() {
     # shellcheck disable=SC1091
     source -- "$(blesh-share)"/ble.sh --attach=none
