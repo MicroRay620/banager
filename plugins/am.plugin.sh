@@ -3,10 +3,9 @@
 am_list=( "am" "appman" )
 grabs=( "curl" "wget" )
 for app in "${am_list[@]}"; do 
-    if command -v "$app" &>/dev/null; then
+    if $app &>/dev/null; then
         working="true"
     else
-        echo "$app doesn't exist on your system"
         working="false"
     fi
 done
