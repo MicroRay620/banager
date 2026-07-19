@@ -1,4 +1,5 @@
 #!/bin/bash
+source -- "$XDG_CONFIG_HOME/banager/config"
 nix_user="$XDG_CONFIG_HOME/banager/user/nixos.sh"
 if command -v nix &>/dev/null; then 
     if [ ! -e "$nix_user" ]; then 
@@ -16,16 +17,12 @@ if command -v nix &>/dev/null; then
         esac
         echo -e "$bash_declare\n$bash_gen\n$dont_delete\nexport NIX_PATH=$nix_path" >> "$nix_user"
     fi
-    use_nixld() {
-        export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$NIX_LD_LIBRARY_PATH"
-        export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:$NIX_LD_LIBRARY_PATH/pkgconfig"
-    }
+    if [ -e "$nix_path/nix-ld.nix" ]; then
+        use_nixld() {
+            export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$NIX_LD_LIBRARY_PATH"
+            export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:$NIX_LD_LIBRARY_PATH/pkgconfig"
+        }
+    fi
     # shellcheck disable=SC1090
     source "$nix_user"
-    # NIXOS ALIASES
-    # shellcheck disable=SC2153
-    alias nixos-rebuild='cd $NIX_PATH && $SUPER nixos-rebuild'
-    alias nix-store='$SUPER nix-store'
-    alias nix-collect-garbage='$SUPER nix-collect-garbage'
-    alias nix-add='cd $HOME/nixos && nvim'
 fi
