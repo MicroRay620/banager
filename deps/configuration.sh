@@ -2,6 +2,7 @@
 shopt -s nullglob
 # shellcheck disable=SC1091
 source "$HOME/.config/banager/banager.conf"
+source "$HOME/.config/banager/ban.sh"
 # TODO: Make these not be in the config file
 if [ "$external_source" = true ]; then
     # shellcheck disable=SC1091
