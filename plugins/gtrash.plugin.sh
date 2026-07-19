@@ -1,5 +1,5 @@
 #!/bin/bash
-prune="$XDG_CONFIG_HOME/bash/user/prune.sh"
+prune="$XDG_CONFIG_HOME/banager/user/prune.sh"
 if [ -z "$prune" ]; then
     touch "$prune"
     bash_declare="#!/bin/bash"
@@ -24,7 +24,7 @@ if [ -z "$prune" ]; then
     esac
     echo -e "$bash_declare\n$bash_gen\n$dont_delete\npruning=\"$prune_denotion\"\nprune=$chosen_prune" >> "${XDG_CONFIG_HOME:-$HOME/.config}"
 fi
-source "$HOME"/.config/bash/user/prune.sh
+source "$HOME"/.config/banager/user/prune.sh
 if command -v &>/dev/null; then
     if [ -z "${XDG_DATA_HOME:-$HOME/.local/Trash}" ]; then
         gtrash prune "$pruning $prune"

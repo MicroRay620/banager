@@ -1,6 +1,6 @@
 #!/bin/bash
 # shellcheck disable=SC1091
-source -- "$XDG_CONFIG_HOME/bash/commands/package_managers.sh"
+source -- "$XDG_CONFIG_HOME/banager/commands/package_managers.sh"
 aur=( "yay" "paru" )
 # shellcheck disable=SC2154
 if [[ "$PKG_MGR" = "${managers[3]}" ]]; then 

@@ -15,7 +15,7 @@ RandomFlags() {
     # echo "$use_flag" # INFO: this is here for debugging what pride flag is used
 }
 Troll() {
-    fetch_file="$XDG_CONFIG_HOME/bash/user/fetch.sh"
+    fetch_file="$XDG_CONFIG_HOME/banager/user/fetch.sh"
     if [[ ! -e "$fetch_file" ]]; then 
         touch "$fetch_file"
         echo -e "$bash_declare\n$bash_gen\n$dont_delete this file is needed for the Flag() function in the .bashrc file\n# This file is here to help check what fastfetch to use" >> "$fetch_file"
@@ -24,7 +24,7 @@ Troll() {
     source "$fetch_file"
 }
 Flag() {
-    fetch_file="$XDG_CONFIG_HOME/bash/user/fetch.sh"
+    fetch_file="$XDG_CONFIG_HOME/banager/user/fetch.sh"
     # This will load the troll function
     Troll 
     # shellcheck disable=SC1090
@@ -88,4 +88,4 @@ Flag() {
         esac
     fi
 }
-
+alias clear='clear && $display_fetch'
