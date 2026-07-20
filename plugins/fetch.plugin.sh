@@ -89,3 +89,4 @@ Flag() {
     fi
 }
 alias clear='clear && $display_fetch'
+

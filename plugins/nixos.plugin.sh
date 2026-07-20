@@ -1,5 +1,5 @@
 #!/bin/bash
-source -- "$XDG_CONFIG_HOME/banager/config"
+source -- "$XDG_CONFIG_HOME/banager/config.sh"
 nix_user="$XDG_CONFIG_HOME/banager/user/nixos.sh"
 if command -v nix &>/dev/null; then 
     if [ ! -e "$nix_user" ]; then 
