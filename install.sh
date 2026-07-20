@@ -6,7 +6,6 @@ supers=$("sudo" "doas")
 for super in "${supers[@]}"; do 
     if $super &>/dev/null; then 
         SUPER="$super"
-        break
     fi
 done
 
@@ -23,8 +22,8 @@ echo "On NixOS system, it's recommended to do user"
 read -r install_choice
 echo "Adding the command..."
 case "$install_choice" in 
-    *user* | *USER*) cp -f ./commands/banager/banager.sh "$HOME/.local/bin/" ;;
-    *sys*  | *SYS* ) $SUPER cp -f ./commands/banager/banager.sh /usr/local/bin ;;
+    *user* | *USER*) cp -fr "$banampt"/commands/banager/banager.sh "$HOME/.local/bin/" ;;
+    *sys*  | *SYS* ) $SUPER cp -fr "$banampt"/commands/banager/banager.sh /usr/local/bin ;;
 esac
 mv ./banager "${XDG_CONFIG_HOME:-$HOME/.config}"
 mv "$HOME"/.bashrc "$HOME"/.bashrc.bak
