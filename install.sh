@@ -16,16 +16,16 @@ rm -rf banager/install.sh banager/docs/
 echo "Making the config and data files..."
 
 mkdir "$HOME"/.local/share/banager
-mv ./banager/deps/ ./banager/commands/ "$HOME"/.local/share/banager
+mv -fu ./banager/deps/ ./banager/commands/ "$HOME"/.local/share/banager
 echo "Install for [user] or [system]? "
 echo "On NixOS system, it's recommended to do user"
 read -r install_choice
 echo "Adding the command..."
 case "$install_choice" in 
-    *user* | *USER*) mv -fr "$banampt"/commands/banager/banager.sh "$HOME/.local/bin/" ;;
-    *sys*  | *SYS* ) $SUPER mv -fr "$banampt"/commands/banager/banager.sh /usr/local/bin ;;
+    *user* | *USER*) mv -fu "$banampt"/commands/banager/banager.sh "$HOME/.local/bin/" ;;
+    *sys*  | *SYS* ) $SUPER mv -fu "$banampt"/commands/banager/banager.sh /usr/local/bin ;;
 esac
-mv ./banager "${XDG_CONFIG_HOME:-$HOME/.config}"
+mv -fu ./banager "${XDG_CONFIG_HOME:-$HOME/.config}"
 mv "$HOME"/.bashrc "$HOME"/.bashrc.bak
 touch "$HOME"/.bashrc
 if [ -e "$HOME/.bashrc" ]; then 
