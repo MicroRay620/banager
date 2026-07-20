@@ -18,3 +18,6 @@ for plugin_file in "$config_dir"/plugins/*.plugin*; do
     # shellcheck disable=SC1090
     [ -f "$plugin_file" ] && source "$plugin_file"
 done
+if [ -e "$config_dir/plugins/fetch.plugin.sh" ]; then 
+    Flag
+fi
