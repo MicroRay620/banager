@@ -30,9 +30,14 @@ mv -fu ./banager "${XDG_CONFIG_HOME:-$HOME/.config}"
 mv "$HOME"/.bashrc "$HOME"/.bashrc.bak
 touch "$HOME"/.bashrc
 if [ -e "$HOME/.bashrc" ]; then 
-    echo -e "#!/bin/bash\nsource -- \"\$(bastore)\"/config.sh" >> "$HOME"/.bashrc
+    if command -v ble-update &>/dev/null; then 
+        echo "Use either: https://github.com/akinomyoga/ble.sh#13-set-up-bashrc or https://github.com/akinomyoga/ble.sh#13-set-up-bashrc"
+    elif command -v blesh-share &>/dev/null; then 
+        echo "source -- \"\$(blesh-share)\"/ble.sh" >> "$HOME"/.bashrc
+    fi
+    # The banager_config="$XDG_DATA_HOME/banager/deps/" source -- "$banager_config"/config.sh is temporary until I can get $banater to work in the source
+    echo -e "#!/bin/bash\nbanager_config=\"\$XDG_DATA_HOME/banager/deps/\"\nsource -- \"\$banager_config\"/config.sh" >> "$HOME"/.bashrc
 fi
-
 rm -rf "$banampt"
 
 # echo "Checking the plugins..."
