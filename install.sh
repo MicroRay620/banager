@@ -6,6 +6,7 @@ supers=$("sudo" "doas")
 for super in "${supers[@]}"; do 
     if $super &>/dev/null; then 
         SUPER="$super"
+        break
     fi
 done
 
