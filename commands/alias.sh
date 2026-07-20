@@ -1,5 +1,4 @@
 #!/bin/bash
-source "$HOME/.config/banager/banager.conf"
 if [ "$enable_alias" = "true" ]; then 
     # shellcheck disable=SC1091
     source -- "$XDG_DATA_HOME/banager/commands/alt-command.sh"
