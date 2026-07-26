@@ -2,8 +2,9 @@
 # shellcheck source=/dev/null
 source /etc/os-release 
 source -- "${XDG_DATA_HOME:-$HOME/.local/share}/banager/commands/package_managers.sh"
-source -- "${XDG_CONFIG_HOME:-$HOME/.config}/banager/deps/config.sh"
-source -- "${XDG_CONFIG_HOME:-$HOME/.config}/banager/plugins/replacement.plugin.sh"
+if [ -e "${XDG_CONFIG_HOME:-$HOME/.config}/plugins/replacement.plugin.sh" ]; then
+    source -- "${XDG_CONFIG_HOME:-$HOME/.config}/banager/plugins/replacement.plugin.sh"
+fi
 if command -v sudo &>/dev/null; then
     export SUPER="sudo"
 elif command -v doas &>/dev/null; then
@@ -16,9 +17,8 @@ else
         exit 3
     fi
 fi
-# shellcheck disable=SC2154
 alias restart="reboot"
-alias poxbash="bash --posix"
+alias posh="bash --posix"
 alias shoot='$SUPER pkill'
 # These make it easier for you to install packages without having to remember which package manager you're using or the arguements
 # For the info on this, the checks are under Package Manager Checks to
@@ -31,17 +31,21 @@ fi
 # These are for if you have timeshift.
 # Don't use these if you don't have timeshift
 # timeshift is a good partition backup for everything except nixos
-if ! command -v nix &>/dev/null; then 
+if command -v timeshift &>/dev/null; then 
     alias backup='$SUPER timeshift --create'
     alias restore='$SUPER timeshift --restore --snapshot'
     alias shotlist='$SUPER timeshift --list-snapshots'
     alias killsnap='$SUPER timeshift --delete'
     alias ukillsnap='$SUPER timeshift --delete-all --yes'
 fi
+
 if command -v swww &>/dev/null; then 
     # awww is updated version of swww
     alias awww=swww
+elif command -v fswww &>/dev/null; then 
+    alias awww=fswww
 fi
+
 # NOTE: THESE ALIASES MAY BE REMOVED AT A LATER DATE
 if command -v youtube-tui &>/dev/null; then 
     alias yt-tui="youtube-tui"
@@ -58,4 +62,4 @@ if [ "$flat_alias" = "true" ]; then
         alias flatrm='flatpak remove'
         alias flatls='flatpak list'
     fi
-fi   
+fi
