@@ -18,7 +18,7 @@ To install a plugin you can either do one of two things
  
 To find plugins, go to the [blugins](https://codeberg.org/RubyRose/blugins.git) repository to see the officially endorsed plugins
 ## Method 1: Command 
-You can use `curl` or `wget` in the *$HOME/.config/banager/plugins* directory.
+You can use `curl` or `wget` in the `~/.config/banager/plugins`/`$HOME/.config/banager/plugins`** directory.
 ```
 # In $HOME/.config/banager/plugins 
 curl -sSLO # then the url to the raw file for the plugin 
