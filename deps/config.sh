@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# shellcheck source=/dev/null
+source -- "${XDG_CONFIG_HOME:-$HOME/.config}/banager/config.sh"
 config_dir="${XDG_CONFIG_HOME:-$HOME/.config}/banager"
 data_dir="${XDG_DATA_HOME:-$HOME/.local/share}/banager"
 cache_dir="${XDG_CACHE_HOME:-$HOME/.cache}/banager"
@@ -57,7 +59,9 @@ if [ "$plugin" = "enable" ]; then
         fi
     done
     if [ -f "$config_dir/plugins/fetch.plugin.sh" ]; then 
-        Flag
+        if [ "$flag_display" = "true" ]; then 
+            Flag
+        fi
     fi
     if [ -f "$config_dir/plugins/gtrash.plugin.sh" ]; then 
         touch "$cache_dir/gtrash.sh" 
