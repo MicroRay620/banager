@@ -15,6 +15,8 @@ wget -q https://codeberg.org/RubyRose/banager/raw/branch/main/install.sh &&
 ```
 # Installing Plugins
 To install a plugin you can either do one of two things
+ 
+To find plugins, go to the [blugins](https://codeberg.org/RubyRose/blugins.git) repository to see the officially endorsed plugins
 ## Method 1: Command 
 You can use `curl` or `wget` in the *$HOME/.config/banager/plugins* directory.
 ```
