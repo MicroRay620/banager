@@ -2,15 +2,15 @@
 banampt=$(mktemp -d banampt.XXXXXX)
 cd "$banampt" || exit 1
 
-supers=$("sudo" "doas")
-for super in "${supers[@]}"; do 
-    if $super &>/dev/null; then 
-        SUPER="$super"
-        break
-    else 
-        continue
-    fi
-done
+# supers=$("sudo" "doas")
+# for super in "${supers[@]}"; do 
+#    if $super &>/dev/null; then 
+#        SUPER="$super"
+#        break
+#    else 
+#        continue
+#    fi
+# done
 
 git clone https://codeberg.org/RubyRose/banager.git 
 
@@ -20,14 +20,14 @@ echo "Making the config and data files..."
 
 mkdir "$HOME"/.local/share/banager
 mv -fu ./banager/deps/ ./banager/commands/ "$HOME"/.local/share/banager
-echo "Install for [user] or [system]? "
-echo "On NixOS system, it's recommended to do user"
-read -r install_choice
-echo "Adding the command..."
-case "$install_choice" in 
-    *user* | *USER*) mv -fu "$banampt"/commands/banager/banager.sh "$HOME/.local/bin/" ;;
-    *sys*  | *SYS* ) $SUPER mv -fu "$banampt"/commands/banager/banager.sh /usr/local/bin ;;
-esac
+# echo "Install for [user] or [system]? "
+# echo "On NixOS system, it's recommended to do user"
+# read -r install_choice
+# echo "Adding the command..."
+# case "$install_choice" in 
+#    *user* | *USER*) mv -fu "$banampt"/commands/banager/banager.sh "$HOME/.local/bin/" ;;
+#    *sys*  | *SYS* ) $SUPER mv -fu "$banampt"/commands/banager/banager.sh /usr/local/bin ;;
+# esac
 mv -fu ./banager "${XDG_CONFIG_HOME:-$HOME/.config}"
 mv -fu "$HOME"/.bashrc "$HOME"/.bashrc.bak
 touch "$HOME"/.bashrc
