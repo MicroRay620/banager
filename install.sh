@@ -36,7 +36,7 @@ if [ -e "$HOME/.bashrc" ]; then
         echo "source -- \"\$(blesh-share)\"/ble.sh" >> "$HOME"/.bashrc
     fi
     # The banager_config="$XDG_DATA_HOME/banager/deps/" source -- "$banager_config"/config.sh is temporary until I can get $banater to work in the source
-    echo -e "#!/bin/bash\nbanager_config=\"\$XDG_DATA_HOME/banager/deps/\"\nsource -- \"\$banager_config\"/config.sh" >> "$HOME"/.bashrc
+    echo -e "#!/usr/bin/env bash\nbanager_config=\"\$XDG_DATA_HOME/banager/deps/\"# shellcheck source=/dev/null\nsource -- \"\$banager_config\"/config.sh" >> "$HOME"/.bashrc
 fi
 rm -rf "$banampt"
 
