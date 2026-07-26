@@ -1,20 +1,31 @@
-#!/bin/bash
+#!/usr/bin/env bash
+# shellcheck source=/dev/null
+source /etc/os-release 
+source -- "${XDG_DATA_HOME:-$HOME/.local/share}/banager/commands/package_managers.sh"
+source -- "${XDG_CONFIG_HOME:-$HOME/.config}/banager/deps/config.sh"
+source -- "${XDG_CONFIG_HOME:-$HOME/.config}/banager/plugins/replacement.plugin.sh"
+if command -v sudo &>/dev/null; then
+    export SUPER="sudo"
+elif command -v doas &>/dev/null; then
+    export SUPER="doas"
+elif command -v sudo-rs &>/dev/null; then
+    export SUPER="sudo-rs"
+else 
+    echo -e "\e[32mBC3: No elivated command found.\e[32m\nFIX: Installed either: sudo, sudo-rs, or doas"
+    if [ "$ID" = "nixos" ]; then
+        exit 3
+    fi
+fi
+# shellcheck disable=SC2154
 if [ "$enable_alias" = "true" ]; then 
-    # shellcheck disable=SC1091
-    source -- "$XDG_DATA_HOME/banager/commands/alt-command.sh"
-    source -- "$XDG_DATA_HOME/banager/commands/package_managers.sh"
     alias restart="reboot"
     alias poxbash="bash --posix"
     alias shoot='$SUPER pkill'
-    alias grep='$GREP'
-    alias du='$DU'
-    alias find='$FIND'
-    alias cat='$CAT'
     # These make it easier for you to install packages without having to remember which package manager you're using or the arguements
     # For the info on this, the checks are under Package Manager Checks to
-    alias pacinstall='$SUPER $PKG_MGR $INSTALL' 
-    alias pacremove='$SUPER $PKG_MGR $REMOVE'
-    alias pacupdate='$SUPER $PKG_MGR $UPDATE'
+    alias pacadd='$SUPER $PKG_MGR $INSTALL' 
+    alias pacrm='$SUPER $PKG_MGR $REMOVE'
+    alias pacudate='$SUPER $PKG_MGR $UPDATE'
     if command -v gtrash &>/dev/null; then 
         alias rm='gtrash put'
     fi
@@ -25,8 +36,8 @@ if [ "$enable_alias" = "true" ]; then
         alias backup='$SUPER timeshift --create'
         alias restore='$SUPER timeshift --restore --snapshot'
         alias shotlist='$SUPER timeshift --list-snapshots'
-        alias killsnapshot='$SUPER timeshift --delete'
-        alias genocidesnapshots='$SUPER timeshift --delete-all --yes'
+        alias killsnap='$SUPER timeshift --delete'
+        alias ukillsnap='$SUPER timeshift --delete-all --yes'
     fi
     if command -v swww &>/dev/null; then 
         # awww is updated version of swww
@@ -41,30 +52,11 @@ if [ "$enable_alias" = "true" ]; then
         alias svr-download="yt-dlp --write-info-json --write-subs --no-write-auto-subs" # This is intended for adding videos to a database/server
     fi
 fi
-if [ "$distro_aliases" = "true" ]; then
-    if [ "$PKG_MGR" = "pacman" ]; then
-        alias pacman='$SUPER pacman' # Will make a alias for every package manager
-        alias pacignore='$SUPER $PKG_MGR $IGNORE'
-        alias extpacinstall='$SUPER $PKG_MGR -U'
-
-        alias aurinstall='$AUR $INSTALL'
-        alias aurremove='$AUR $REMOVE'
-
-        alias aurupdate='$AUR $UPDATE'
-
-        if command -v downgrade &>/dev/null; then
-            # For configuring, please do `$ man downgrade` or `$ downgrade --help`
-            # INFO: downgrade is only on Arch
-            alias downgrade='$SUPER downgrade' # This is to make using the command easier
-        fi
-        # To update just type in your AUR manager for this, can be done with `$ paru` or `$ yay`
-        # the `else` is no longer necessary, adding pacupdate for all distros for simplicity sake 
-    elif [ "$PKG_MGR" = "nix" ]; then 
-        # NIXOS ALIASES
-        # shellcheck disable=SC2153
-        alias nixos-rebuild='cd $NIX_PATH && $SUPER nixos-rebuild'
-        alias nix-store='$SUPER nix-store'
-        alias nix-collect-garbage='$SUPER nix-collect-garbage'
-        alias nix-add='cd $HOME/nixos && nvim'
+# shellcheck disable=SC2154
+if [ "$flat_alias" = "true" ]; then 
+    if command -v flatpak &>/dev/null; then 
+        alias flatadd='flatpak install'
+        alias flatrm='flatpak remove'
+        alias flatls='flatpak list'
     fi
-fi
+fi   
