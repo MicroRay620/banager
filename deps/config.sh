@@ -13,9 +13,15 @@ fi
 shopt -s expand_aliases
 for cmd_file in "$data_dir"/commands/*; do
     if [ -f "$cmd_file" ]; then
-        # shellcheck source=/dev/null
-        source "$cmd_file"
-    fi
+        # NOTE: declare.sh is only for plugins and some files 
+        # It isn't needed to be sourced
+        if [ ! "$cmd_file" = "${XDG_DATA_HOME:-$HOME/.local/share}/banager/commands/declare.sh" ]; then
+            # shellcheck source=/dev/null
+            source "$cmd_file"
+        else 
+            continue 
+        fi
+   fi
 done
 # Plugins
 # This is for managing the plugins
