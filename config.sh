@@ -1,9 +1,9 @@
 #!/bin/bash
 # Use plugins at your own risk
-# export plugin=enabled # You need this enabled for plugins. This variable may be removed
-# export distro_aliases=true
-# export flat_alias=true 
-# export flag_display=true
+# plugin=enabled # You need this enabled for plugins. This variable may be removed
+# distro_aliases=true
+# flat_alias=true 
+# flag_display=true
 
 # Evals and Sources 
 # This is here for you imports and addition plugins that are made for bash and exclusively for banager. 
