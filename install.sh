@@ -7,6 +7,8 @@ for super in "${supers[@]}"; do
     if $super &>/dev/null; then 
         SUPER="$super"
         break
+    else 
+        continue
     fi
 done
 
@@ -27,7 +29,7 @@ case "$install_choice" in
     *sys*  | *SYS* ) $SUPER mv -fu "$banampt"/commands/banager/banager.sh /usr/local/bin ;;
 esac
 mv -fu ./banager "${XDG_CONFIG_HOME:-$HOME/.config}"
-mv "$HOME"/.bashrc "$HOME"/.bashrc.bak
+mv -fu "$HOME"/.bashrc "$HOME"/.bashrc.bak
 touch "$HOME"/.bashrc
 if [ -e "$HOME/.bashrc" ]; then 
     if command -v ble-update &>/dev/null; then 
