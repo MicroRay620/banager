@@ -1,4 +1,9 @@
-#!/bin/bash
+#!/usr/bin/env bash
+#!banager/plugin
+# name = AppManager Plugin 
+# owner = RubyRose
+# description = This is a plugin for the AM/AppMan appimage package manager
+# source = https://codeberg.org/RubyRose/banager/src/branch/main/plugins/am.plugin.sh
 # AM is an appimage package manager
 am_list=( "am" "appman" )
 grabs=( "curl" "wget" )
