@@ -44,7 +44,7 @@ rm -rf "$banampt"
 # banager_config="${XDG_CONFIG_HOME:-$HOME/.config}/banager"
 # supported=( "nixos" "archlinux" "cachyos" "endeavouros" "manjaro" "garuda" )
 # shellcheck disable=SC1091
-source /etc/os-release
+# source /etc/os-release
 # TODO: Make a check to autodelete the unused and unsupported distro plugins
 
 echo "Installed."
