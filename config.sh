@@ -1,6 +1,7 @@
 #!/bin/bash
 # Use plugins at your own risk
 # plugin=enabled # You need this enabled for plugins. This variable may be removed
+# shellcheck disable=SC2034
 # distro_aliases=true
 # flat_alias=true 
 # flag_display=true
