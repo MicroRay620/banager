@@ -29,7 +29,10 @@ mv -fu ./banager/deps/ ./banager/commands/ "$HOME"/.local/share/banager
 #    *sys*  | *SYS* ) $SUPER mv -fu "$banampt"/commands/banager/banager.sh /usr/local/bin ;;
 # esac
 mv -fu ./banager "${XDG_CONFIG_HOME:-$HOME/.config}"
-mv -fu "$HOME"/.bashrc "$HOME"/.bashrc.bak
+if [ -e "$HOME/.bashrc" ]; then 
+    mv -fu "$HOME"/.bashrc "$HOME"/.bashrc.bak
+    echo "Made .bashrc.bak"
+fi
 touch "$HOME"/.bashrc
 if [ -e "$HOME/.bashrc" ]; then 
     # The banager_config="$XDG_DATA_HOME/banager/deps/" source -- "$banager_config"/config.sh is temporary until I can get $banater to work in the source
