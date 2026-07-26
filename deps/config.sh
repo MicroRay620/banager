@@ -11,7 +11,6 @@ if [ ! -e "${XDG_CACHE_HOME:-$HOME/.cache}/banager" ]; then
     mkdir "$cache_dir"
 fi
 # Commands
-shopt -s expand_aliases
 for cmd_file in "$data_dir"/commands/*; do
     if [ -f "$cmd_file" ]; then
         # NOTE: declare.sh is only for plugins and some files 
@@ -28,6 +27,9 @@ done
 # This is for managing the plugins
 # shellcheck disable=SC2154
 if [ "$plugin" = "enable" ]; then
+    if [ ! -e "${XDG_CONFIG_HOME:-$HOME/.config}/banager/plugins" ]; then 
+        mkdir "$config_dir/plugins"
+    fi
     for plugin_file in "$config_dir"/plugins/*.plugin*; do
         plugin_path="${plugin_file##*\/}"
         invalid_plugin="${plugin_path%%.plugin.sh}"
@@ -70,4 +72,3 @@ if [ "$plugin" = "enable" ]; then
         fi
     fi
 fi
-
