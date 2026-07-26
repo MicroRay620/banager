@@ -33,7 +33,10 @@ mv -fu "$HOME"/.bashrc "$HOME"/.bashrc.bak
 touch "$HOME"/.bashrc
 if [ -e "$HOME/.bashrc" ]; then 
     # The banager_config="$XDG_DATA_HOME/banager/deps/" source -- "$banager_config"/config.sh is temporary until I can get $banater to work in the source
-    echo -e "#!/usr/bin/env bash\nbanager_config=\"\$XDG_DATA_HOME/banager/deps/\"\n# shellcheck source=/dev/null\nsource -- \"\$banager_config\"/config.sh" >> "$HOME"/.bashrc
+    echo -e "#!/usr/bin/env bash
+    \nbanager_config=\"\$XDG_DATA_HOME/banager/deps/\"\n
+    # shellcheck source=/dev/null
+    \nsource -- \"\$banager_config\"/config.sh" >> "$HOME"/.bashrc
 fi
 rm -rf "$banampt"
 
