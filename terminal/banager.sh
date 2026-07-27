@@ -25,5 +25,6 @@ banager() {
         esac
     done
 }
+# shellcheck source=/dev/null
 source -- "$locate_config"/config.sh
 
