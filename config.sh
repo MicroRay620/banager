@@ -10,6 +10,7 @@
 # This is here for you imports and addition plugins that are made for bash and exclusively for banager. 
 # Such as blesh, thefuck, pay-respects, starship, and zoxide
 # Look at the docs for those tools for how to add them and look for the bash option.
+# shellcheck source=/dev/null
 # source -- "$(blesh-share)"/ble.sh # Uncomment this if you have ble.sh on your system
 # eval "$(starship init bash)" # Uncomment this eval if you have starship on your system
 # eval "$(zoxide init bash --cmd cd)" # Uncomment this if you have zoxide on your system
