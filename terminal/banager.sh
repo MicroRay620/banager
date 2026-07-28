@@ -12,7 +12,7 @@ for grab in curl wget; do
         get="$grab"
     fi
 done
-banager() {
+Banager() {
     while true; do 
         case "$1" in 
             "-c" | "--config") 
@@ -75,6 +75,7 @@ banager() {
         esac
     done
 }
+alias banager=Banager
 # shellcheck source=/dev/null
 source -- "$locate_config"/config.sh
 
