@@ -13,12 +13,16 @@ wget -q https://codeberg.org/RubyRose/banager/raw/branch/main/install.sh &&
     sh ./install.sh && 
       rm -rf ./install.sh
 ```
+## Dependencies
+For functionality of this config, you will need [`ble.sh`](https://github.com/akinomyoga/ble.sh) installed on your system. 
+
+Click on the link provided to install it.
 # Installing Plugins
 To install a plugin you can either do one of two things
  
 To find plugins, go to the [blugins](https://codeberg.org/RubyRose/blugins.git) repository to see the officially endorsed plugins
 ## Method 1: Command 
-You can use `curl` or `wget` in the `~/.config/banager/plugins`/`$HOME/.config/banager/plugins`** directory.
+You can use `curl` or `wget` in the `~/.config/banager/plugins`/`$HOME/.config/banager/plugins` directory.
 ```
 # In $HOME/.config/banager/plugins 
 curl -sSLO # then the url to the raw file for the plugin 
@@ -34,3 +38,13 @@ Then you open the file in a text editor (like neovim, emacs, nano, or kate).
 Copy the plugin's contents (in the repository, it should be the `.plugin.sh` or `.plugin` file)
 ### Step 4: Paste the file contents 
 Then you paste the plugin's contents into the plugin file you made
+# Development
+As a programmer: I, [RubyRose](https://codeberg/RubyRose), understand that some people use things like Google Gemini, Claude Code, ChatGPT, GitHub Copilot, Microsoft 
+Copilot, and other Large Language Models to understand the code and learn the code. However, this project is meant for humans and to be used by humans. To keep it that way,
+LLM Agents are meant to be used for accessibility purposes (such as spellchecking and fully seeing errors (like mispellings or spaces missing)) and
+not generating the code. If you use these tools, please make sure to include what is stated in the [AGENTS.md](https://codeberg.org/RubyRose/banager/src/main/AGENTS.md).
+# Todos
+- [x] change the name of `./commands` to `./src` 
+- [x] make the `./user/` directory that gets made in either `$HOME/.local/share/banager` or `~/.cache/banager`
+- [x] make it so `~/.cache/banager` has proper sub-directories
+- [ ] Get the cli command working
