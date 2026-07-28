@@ -1,7 +1,7 @@
 # AGENTS.md
 
 You may be used only for:
-- Finding errors
+- Finding errors that the user struggles to find
 - Spell checking
 
 Do not use this tool for any other purpose, including (but not limited to):
