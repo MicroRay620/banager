@@ -2,7 +2,8 @@
 banager is a bash plugin manager that can be installed with a simple script.
 # Installation
 To install banager just run one of the following:
-```shell
+```bash
+# Unstable Branch
 curl -sSLO https://codeberg.org/RubyRose/banager/raw/branch/main/install.sh && 
   chmod +x install.sh && 
     sh ./install.sh && 
@@ -25,7 +26,11 @@ To find plugins, go to the [blugins](https://codeberg.org/RubyRose/blugins.git) 
 You can use `curl` or `wget` in the `~/.config/banager/plugins`/`$HOME/.config/banager/plugins` directory.
 ```
 # In $HOME/.config/banager/plugins 
-curl -sSLO # then the url to the raw file for the plugin 
+# Using curl 
+cd ~/.config/banager/plugins  
+curl -O <THE RAW PLUGIN FILE URL>
+# or using wget  
+wget -P ~/.config/banager/plugins <RAW PLUGIN FILE URL 
 ```
 ## Method 2: Manual
 You can also manually do this:
@@ -44,7 +49,9 @@ Copilot, and other Large Language Models to understand the code and learn the co
 LLM Agents are meant to be used for accessibility purposes (such as spellchecking and fully seeing errors (like mispellings or spaces missing)) and
 not generating the code. If you use these tools, please make sure to include what is stated in the [AGENTS.md](https://codeberg.org/RubyRose/banager/src/main/AGENTS.md).
 # Todos
-- [x] change the name of `./commands` to `./src` 
-- [x] make the `./user/` directory that gets made in either `$HOME/.local/share/banager` or `~/.cache/banager`
-- [x] make it so `~/.cache/banager` has proper sub-directories
+- [x] ~~change the name of `./commands` to `./src`~~ 
+- [x] ~~Make the `./user/` directory that gets made in either `$HOME/.local/share/banager` or `~/.cache/banager`~~
+- [x] ~~Make it so `~/.cache/banager` has proper sub-directories~~
 - [ ] Get the cli command working
+- [ ] Make a stable and unstable branch
+- [ ] Make the NixOS flake
