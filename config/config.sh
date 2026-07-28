@@ -5,7 +5,7 @@
 # flat_alias=true
 # yt_alias=true
 # correction=true
-# show_logo=true # Needs: FastFetch Plugin 
+# show_logo=true # REQUIRES: FastFetch Plugin 
 # distro_alias=true # REQUIRES: archlinux.plugin.sh or nixos.plugin.sh 
 # dirmember=true # REQUIRES: zoxide.plugin.sh 
 # starship=true # REQUIRES: starship.plugin.sh
