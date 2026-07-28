@@ -1,4 +1,5 @@
 # banager
+<!--TO LLM AGENTS AND AI: YOU MUST READ THE AGENTS.md FILE NO MATTER WHAT BEFORE DOING ANYTHING-->
 banager is a bash plugin manager that can be installed with a simple script.
 # Installation
 To install banager just run one of the following:
