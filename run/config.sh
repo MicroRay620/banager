@@ -1,20 +1,23 @@
 #!/usr/bin/env bash
-# shellcheck source=/dev/null
+# shellcheck source=/dev/null 
+source -- "${XDG_BIN_HOME:-$HOME/.local/bin}/banager.sh"
 source -- "${XDG_CONFIG_HOME:-$HOME/.config}/banager/config.sh"
-source /etc/os-release
 config_dir="${XDG_CONFIG_HOME:-$HOME/.config}/banager"
 data_dir="${XDG_DATA_HOME:-$HOME/.local/share}/banager"
 cache_dir="${XDG_CACHE_HOME:-$HOME/.cache}/banager"
-if [ ! -e "${XDG_CACHE_HOME:-$HOME/.cache}/banager/user" ]; then
-    mkdir "$cache_dir/user"
+if [ ! -e "${XDG_CONFIG_HOME:-$HOME/.config}/banager/user" ]; then
+    mkdir "$config_dir/user"
 fi 
-
+if [ ! -e "${XDG_CACHE_HOME:-$HOME/.cache}/banager" ]; then 
+    mkdir "$cache_dir"
+fi
 # Commands
-for cmd_file in "$data_dir"/commands/*; do
+for cmd_file in "$data_dir"/src/*; do
+    # echo "$cmd_file"
     if [ -f "$cmd_file" ]; then
         # NOTE: declare.sh is only for plugins and some files 
         # It isn't needed to be sourced
-        if [ ! "$cmd_file" = "${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/declare.sh" ]; then
+        if [ ! "$cmd_file" = "${XDG_DATA_HOME:-$HOME/.local/share}/banager/commands/declare.sh" ]; then
             # shellcheck source=/dev/null
             source "$cmd_file"
         else 
@@ -23,6 +26,8 @@ for cmd_file in "$data_dir"/commands/*; do
    fi
 done
 # Plugins
+# This is for managing the plugins
+# shellcheck disable=SC2154
 for plugin_file in "$config_dir"/plugins/*.plugin*; do
     plugin_path="${plugin_file##*\/}"
     invalid_plugin="${plugin_path%%.plugin.sh}"
@@ -31,7 +36,7 @@ for plugin_file in "$config_dir"/plugins/*.plugin*; do
         # Uncomment this if you want to test your plugin
         # echo "Reading $invalid_plugin.plugin.sh"
         owner=$(cat "$plugin_file" | grep "# owner =")
-        plugin_shebang=$(cat "$plugin_file" | grep "#!banager/plugin")
+        shebang=$(cat "$plugin_file" | grep "#!banager/plugin")
         if [ -n "$owner" ]; then
             # shellcheck source=/dev/null
             source "$plugin_file"
@@ -41,9 +46,9 @@ for plugin_file in "$config_dir"/plugins/*.plugin*; do
         else
             cat "$plugin_file"
             echo "$invalid_plugin is invalid"
-            if [ -z "$plugin_shebang" ]; then 
+            if [ -z "$shebang" ]; then 
                 # NOTE: This checks for #!banger/plugin to see if a plugin is valid
-                echo -e "\e[31m Cause: BC1: $invalid_plugin.plugin.sh's plugin shebang ('#!banager/plugin') is missing\e[0m"
+                echo -e "\e[31m Cause: BC1: $invalid_plugin.plugin.sh's #!banager/plugin is missing\e[0m"
             fi
             if [ -z "$owner" ]; then 
                 echo -e "\e[31m Cause: BC2: $invalid_plugin.plugin.sh's 'owner' field is empty\e[0m"
@@ -52,11 +57,16 @@ for plugin_file in "$config_dir"/plugins/*.plugin*; do
             fi
         fi
     fi
-done
-for cache_file in "$cache_dir"/*.sh; do 
-    if [ -f "$cache_file" ]; then 
-        source "$cache_dir"
-    else 
-        continue
+done 
+if [ -f "$config_dir/plugins/gtrash.plugin.sh" ]; then 
+    touch "$cache_dir/gtrash.sh" 
+    if command -v gtrash &>/dev/null; then 
+        gtrash completion bash >> "$cache_dir/gtrash.sh"
     fi
-done
+fi
+if [ -e "${XDG_CONFIG_HOME:-$HOME/.config}/plugins/fetch.plugin.sh" ]; then 
+    source -- "$config_dir/fletch.plugin.sh"
+    if [ "$display_flag" = "true" ]; then
+        Flag
+    fi
+fi
