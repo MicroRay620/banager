@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
-# shellcheck source=/dev/null 
-source -- "${XDG_BIN_HOME:-$HOME/.local/bin}/banager"
+# shellcheck source=/dev/null
+if [ -e "${XDG_BIN_HOME:-$HOME/.local/bin}/banager" ]; then 
+    source -- "${XDG_BIN_HOME:-$HOME/.local/bin}/banager"
+elif [ -e "/usr/local/bin/banager" ]; then 
+    source -- /usr/local/bin/banager 
+fi
 source -- "${XDG_CONFIG_HOME:-$HOME/.config}/banager/config.sh"
 config_dir="${XDG_CONFIG_HOME:-$HOME/.config}/banager"
 data_dir="${XDG_DATA_HOME:-$HOME/.local/share}/banager"
