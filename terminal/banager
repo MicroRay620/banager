@@ -78,8 +78,8 @@ Banager() {
                             plugsource="https://codeberg.org/RubyRose/blugins/plugins/$3.plugin.sh"
                             # echo "$plugsource"
                             # echo "$flag"
-                            echo "$gets $plugsource $flag $file"
-                            plugadd=$(eval $gets "$plugsource" "$flag" "$file")
+                            # echo "$gets $plugsource $flag $file"
+                            plugadd=$($gets "$plugsource" "$flag" "$file")
                             echo "$plugadd"
                             break
                         else 
