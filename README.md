@@ -53,6 +53,7 @@ not generating the code. If you use these tools, please make sure to include wha
 - [x] ~~change the name of `./commands` to `./src`~~ 
 - [x] ~~Make the `./user/` directory that gets made in either `$HOME/.local/share/banager` or `~/.cache/banager`~~
 - [x] ~~Make it so `~/.cache/banager` has proper sub-directories~~
-- [ ] Get the cli command working
-- [ ] Make a stable and unstable branch
+- [x] ~~Get the cli command working~~
+- [x] ~~Make a stable and unstable branch~~
 - [ ] Make the NixOS flake
+- [ ] Get an IRC/Matrix chat for support and communication
