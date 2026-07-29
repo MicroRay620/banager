@@ -70,18 +70,18 @@ read -r install_choice
 echo "Adding the command..."
 case "$install_choice" in 
     *user* | *USER*) 
-        if [ ! -e "${XDG_BIN_HOME:-$HOME/.local/bin}/banager.sh" ]; then 
+        if [ ! -e "${XDG_BIN_HOME:-$HOME/.local/bin}/banager" ]; then 
             echo "Adding command to user..."
-            mv -fu "$banampt"/src/banager/banager.sh "${XDG_BIN_HOME:-$HOME/.local/bin}" 
+            mv -fu "$banampt"/src/banager/banager "${XDG_BIN_HOME:-$HOME/.local/bin}" 
             echo "Added command to user :)"
         else 
             echo "The command is already installed on the user"
         fi
         ;;
     *sys*  | *SYS* ) 
-        if [ ! -e "/usr/local/bin" ]; then
+        if [ ! -e "/usr/local/bin/banager" ]; then
             echo "Adding command to system..."
-            $SUPER mv -fu "$banampt"/src/banager/banager.sh /usr/local/bin 
+            $SUPER mv -fu "$banampt"/src/banager/banager /usr/local/bin 
             echo "Added command to system :)"
         else 
             echo "Command is already on the system"
