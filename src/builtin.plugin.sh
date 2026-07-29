@@ -4,17 +4,26 @@
 # What this enabled is stuff like syntax highlighting and more 
 # shellcheck source=/dev/null
 source -- /etc/os-release
-source -- "${XDG_DATA_HOME:-$HOME/.local/share}/banager/commands/declare.sh"
+source -- "${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/declare.sh"
+source -- "${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/package_manager.sh"
 source -- "${XDG_CONFIG_HOME:-$HOME/.config}/banager/config.sh"
 # Because of how common it is for people to use syntax highlighting and command completion there is no option to enable or disable this
 if [ "$ID" = "nixos" ] || [ "$ID_LIKE" = "nixos" ] ; then 
     # shellcheck source=/dev/null
     source -- "$(blesh-share)"/ble.sh
+    echo "You're on NixOS: please add blesh to the packages installed"
 elif [ "$ID" = "archlinux" ] || [ "$ID_LIKE" = "archlinux" ]; then
     if [ -e "${XDG_CONFIG_HOME:-$HOME/.config}/banager/plugins/archlinux.plugin.sh" ]; then
-        source /usr/share/blesh/ble.sh
+        if command -v ble-opt &>/dev/null; then 
+            source /usr/share/blesh/ble.sh
+        else 
+            $AUR "$SKIP_CONF $INSTALL" blesh 
+            source /usr/share/blesh/ble.sh
+        fi
     fi
-else 
+else
+    git clone --recursive --depth 1 --shallow-submodules https://github.com/akinomyoga/ble.sh.git
+    make -C ble.sh install PREFIX=~/.local
     # shellcheck source=/dev/null disable=SC2154
     source -- "${XDG_DATA_HOME:-$HOME/.local/share}/blesh/ble.sh"
 fi
@@ -45,6 +54,9 @@ if [ "$dirmember" = "true" ]; then
     if command -v zoxide &>/dev/null; then 
         eval "$(zoxide init bash --cmd cd)"
     else
+        if [ ! "$ID" = "nixos" ] || [ ! "$ID_LIKE" = "nixos" ]; then 
+            $SUPER "$PKG_MGR $INSTALL" zoxide 
+        fi
         echo -e "\e[31mBC1: You have the zoxide plugin but zoxide isn't installed.\e[0m" 
     fi
 fi
@@ -106,7 +118,26 @@ if [ "$correction" = "true" ]; then
         else 
             handle=""
         fi
-        eval "$(pay-respect "$alias_call $handle")"   
+        eval "$(pay-respect "$alias_call $handle")"
+    else 
+        echo -e "REPO LINKS:\nhttps://github.com/nvbn/thefucks\nhttps://github.com/iffse/pay-respects"
+        echo "Would you like thefuck or pay-respect? "
+        read -r correct_option
+        shopt -s nocasematch
+        case "$correct_option" in 
+            thefuck) $SUPER "$PKG_MGR $INSTALL" thefuck ;;
+            pay-respect) 
+                if [ -e "${XDG_CONFIG_HOME:-$HOME/.config}/plugins/archlinux.plugin.sh" ]; then 
+                    $AUR "$INSTALL" pay-respects 
+                else
+                    if [ "$ID" = "nixos" ] || [ "$ID_LIKE" = "nixos" ]; then 
+                        echo "Add pay-respects to your nixos configuration.nix"
+                    else
+                        if command -v cargo &>/dev/null; then 
+                            cargo install -y pay-respects
+                        fi
+                    fi
+                fi
+        esac
     fi
 fi
-
