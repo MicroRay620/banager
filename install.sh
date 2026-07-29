@@ -4,31 +4,20 @@ source -- /etc/os-release
 banampt=$(mktemp -d banampt.XXXXXX)
 cd "$banampt" || exit 1
 
-supers=$("sudo" "doas")
-for super in "${supers[@]}"; do 
-   if $super &>/dev/null; then 
+for super in sudo sudo-rs doas; do 
+   if command -v $super &>/dev/null; then 
        SUPER="$super"
        break
    else 
        continue
    fi
 done
-echo "Checking dependencies..."
-if command -v ble-attach &>/dev/null; then
-    echo "ble.sh is installed, can continue"
-else 
-    echo "ble.sh is not installed. Please install it then try again"
-    cd ../ || exit 1
-    rm -rf "$banampt"
-    if [ ! "$ID" = "nixos" ] && [ ! "$ID_LIKE" = "nixos" ]; then
-        if [ ! "$ID" = "archlinux" ] && [ ! "$ID_LIKE" = "archlinux" ]; then 
-            git clone --recursive --depth 1 --shallow-submodules https://github.com/akinomyoga/ble.sh.git
-            make -C ble.sh install PREFIX=~/.local
-            echo 'source -- ~/.local/share/blesh/ble.sh' >> "${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/blesh.sh"
-        fi
+for pack in apk apt dnf pacman; do 
+    if command -v "$pack" &>/dev/null; then 
+        PKG="$pack"
     fi
-    exit 2
-fi
+done
+# Dependencies are installed through ./src/builtin.plugin.sh
 # TODO: Add an input for the branch
 # Branch Options:
 # - stable (this will be just banager)
