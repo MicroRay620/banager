@@ -44,15 +44,6 @@ if [ "$yt_alias" = "true" ]; then
     fi
 fi
 
-# shellcheck disable=SC2154
-if [ "$flat_alias" = "true" ]; then 
-    if command -v flatpak &>/dev/null; then 
-        alias flatadd='flatpak install'
-        alias flatrm='flatpak remove'
-        alias flatls='flatpak list'
-    fi
-fi
-
 # NOTE: THESE ALIASES MAY BE REMOVED AT A LATER DATE
 if command -v youtube-tui &>/dev/null; then 
     alias yt-tui="youtube-tui"
