@@ -14,7 +14,7 @@ for super in "${supers[@]}"; do
    fi
 done
 echo "Checking dependencies..."
-if command -v bleopt &>/dev/null; then
+if command -v ble-attach &>/dev/null; then
     echo "ble.sh is installed, can continue"
 else 
     echo "ble.sh is not installed. Please install it then try again"
