@@ -25,8 +25,15 @@ done
 echo "Do you want [stable] or [unstable]? "
 read -r branch 
 case "$branch" in 
-    *unstable* | *UNSTABLE*) git clone --bare https://codeberg.org/RubyRose/banager.git ;;
-    *stable* | *STABLE*) git clone --bare https://codeberg.org/RubyRose/banager/src/stable.git ;;
+    *unstable* | *UNSTABLE*) 
+        git clone --bare https://codeberg.org/RubyRose/banager
+        branch="main"
+        stable="unstable"
+        ;;
+    *stable* | *STABLE*) git clone --bare https://codeberg.org/RubyRose/banager/src/branch/stable
+        branch="unstable"
+        stable="stable"
+        ;;
 esac
 echo "Removing dev and useless files and folders..."
 rm -rf banager/install.sh banager/docs/
@@ -62,6 +69,16 @@ if [ ! -f "${XDG_CACHE_HOME:-$HOME/.cache}/banager" ]; then
         mkdir "${XDG_CACHE_HOME:-$HOME/.cache}/banager/plugins"
         echo "Made the plugin cache :)"
     fi
+    if [ ! -f "${XDG_CACHE_HOME:-$HOME/.cache}/banager/install" ]; then 
+        echo "Making the install cache..."
+        mkdir "${XDG_CACHE_HOME:-$HOME/.cache}/banager/install"
+        echo "Made install cache :)"
+        echo "Making the update cache file..."
+        touch "${XDG_CACHE_HOME:-$HOME/.cache}/banager/install/update.storage.sh"
+        echo -e "#!/usr/bin/env bash
+        \n# This was made from Banager's install.sh file
+        \n# This file is here for the \`\$ banager --update\` command\ninstalled_branch=$branch # This the $stable branch" >> "${XDG_CACHE_HOME:-$HOME/.cache}/banager/install/update.storage.sh"
+    fi
     echo "Made the cache directory."
 fi
 echo "Install for [user] or [system]? "
@@ -77,6 +94,7 @@ case "$install_choice" in
         else 
             echo "The command is already installed on the user"
         fi
+        echo "cmd_level=\"user\"" >> "${XDG_CACHE_HOME:-$HOME/.cache}/banager/install/update.storage.sh"
         ;;
     *sys*  | *SYS* ) 
         if [ ! -e "/usr/local/bin/banager" ]; then
@@ -86,6 +104,7 @@ case "$install_choice" in
         else 
             echo "Command is already on the system"
         fi
+        echo "cmd_level=\"system\"" >> "${XDG_CACHE_HOME:-$HOME/.cache}/banager/install/update.storage.sh"
         ;;
 esac
 mv -fu ./banager/config/config.sh "${XDG_CONFIG_HOME:-$HOME/.config}"
