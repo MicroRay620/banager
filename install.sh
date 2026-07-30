@@ -12,11 +12,7 @@ for super in sudo sudo-rs doas; do
        continue
    fi
 done
-for pack in apk apt dnf pacman; do 
-    if command -v "$pack" &>/dev/null; then 
-        PKG="$pack"
-    fi
-done
+
 # Dependencies are installed through ./src/builtin.plugin.sh
 # TODO: Add an input for the branch
 # Branch Options:
