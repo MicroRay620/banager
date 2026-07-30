@@ -8,9 +8,9 @@ banager is a bash plugin manager that can be installed with a simple script.
 > use cases. Though, this is subject to change.
 > 
 > **EXISTENCE OF AGENTS.md & CLAUDE.md**
-> 
+>  
 > To enforce the guidelines for LLM Agents, there is a [CLAUDE.md](https://codeberg.org/RubyRose/banager/src/branch/main/CLAUDE.md) 
-> to ensure
+> to ensure that if Claude Code is used it will read the [AGENTS.md](https://codeberg.org/RubyRose/banager/src/branch/main/AGENTS.md)
 # Installation
 To install banager just run one of the following:
 ```bash
