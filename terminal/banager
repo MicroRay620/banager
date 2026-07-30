@@ -128,8 +128,11 @@ Banager() {
             # Probably will make more options for this
             # TODO: Make this able to install plugins and have a sub-argument
             ;;
-        "-u" | "--update" | "update") 
-            $get https://codeberg.org/RubyRose/banager/raw/branch/main/update.sh && sh update.sh && rm -rf ./update.sh 
+        "-u" | "--update")
+            file="update.sh"
+            $get "$flag" https://codeberg.org/RubyRose/banager/raw/branch/main/update.sh >> update.sh 
+            bash update.sh
+            rm -rf ./update.sh 
             shift 1
             ;;
     esac
