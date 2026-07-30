@@ -25,12 +25,15 @@ belp() {
     -c | --config: lists the config location for you file
     -p | --plugins: interact with plugins 
         help: list all the arguments for banager -p 
-            aliased to banpelp
+            alias: banpelp
         list: list out the installed plugins that's in ~/.config/banager/plugins/
-            aliased to banpist 
-        install | add: install a new plugin (requires a url to the raw bil
+            alias: banpist 
+        install | add: install a new plugin (requires a url to the raw file)
             banager [-p | --plugins] [install|add] {RAW PLUGIN FILE URL}
-            aliased to banpadd
+            alias: banpadd
+        update: update a plugin that is installed 
+            banager [-p | --plugins] update {PLUGIN NAME}
+            alias: banpup
         uninstall | remove | rm: remove an installed plugin 
             banager [-p | --plugins] [uninstall|remove] {PLUGIN FILE}
     -u | --update: updates banager"
@@ -56,6 +59,7 @@ Banager() {
             ;;
         "-p" | "--plugins")
             # TODO: Add an option to add more repos to look through
+            # Also add an update option
             case "$2" in 
                 help) 
                     pelp 
@@ -81,6 +85,15 @@ Banager() {
                     esac
                     shift 2
                     ;;
+                update)
+                    arg="$3"
+                    file="${XDG_CONFIG_HOME:-$HOME/.config}/banager/plugins/$arg.plugin.sh"
+                    if [ -f "$file" ]; then 
+                        repo=$(cat "$file" | grep -m1 -oP '(?<=# source = ).*')
+                        $get "$flag" "$output$file" "$repo"
+                    # TODO: Add the update all option
+                    fi
+                    ;;
                 uninstall | remove | rm)     
                     arg="$3"
                     if [ -e "${XDG_CONFIG_HOME:-$HOME/.config}/banager/plugins/$3.plugin.sh" ]; then
@@ -93,9 +106,14 @@ Banager() {
                                 file="$3.plugin.sh"
                                 cd "$HOME/.config/banager/plugins/" || return
                                 rm -rf "$file"
+                                if [ -e "${XDG_CONFIG_HOME:-$HOME/.config}/banager/plugins/gtrash.plugin.sh" ]; then 
+                                    # This is here to make it not take up any room on the device
+                                    gtrash rm "$file"
+                                fi
                                 echo "removed $3.plugin.sh from ~/.config/banager/plugins"
                                 echo "removing $3.plugin.sh cache"
-                                rm -rf "${XDG_CACHE_HOME:-$HOME/.cache}/banager/plugin/$3.*.sh"
+                                rm -rf "${XDG_CACHE_HOME:-$HOME/.cache}/banager/plugins/$3.*.sh"
+                                echo "removed $3.plugin.sh cache"
                                 ;;
                             no) return ;;
                         esac
@@ -121,5 +139,6 @@ alias banpelp='Banager -p help'
 alias banpist='Banager -p list'
 alias banpadd='Banager -p add'
 alias banprem='Banager -p rm'
+alias banpup='Banager -p update'
 # shellcheck source=/dev/null
 source -- "$locate_config"/config.sh
