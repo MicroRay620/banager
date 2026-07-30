@@ -26,7 +26,8 @@ if [ -f "${XDG_CONFIG_HOME:-$HOME/.config}/banager" ]; then
     fi
 fi
 if [ -e "${XDG_CONFIG_HOME:-$HOME/.config}/banager/plugins/gtrash.plugin.sh" ]; then 
-    gtrash rm banager 
+    rm -rf banager/
+    gtrash rm banager/ 
 else 
-    rm -rf banager
+    rm -rf banager/
 fi
