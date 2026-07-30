@@ -1,123 +1,123 @@
 #!/usr/bin/env bash
-# shellcheck source=/dev/null
-source -- /etc/os-release
-banampt=$(mktemp -d banampt.XXXXXX)
-cd "$banampt" || exit 1
-
-for super in sudo sudo-rs doas; do 
-   if command -v $super &>/dev/null; then 
-       SUPER="$super"
-       break
-   else 
-       continue
-   fi
-done
-for pack in apk apt dnf pacman; do 
-    if command -v "$pack" &>/dev/null; then 
-        PKG="$pack"
+# TODO: Make a custom terminal command for banager to allow installation of and display of various things
+locate_config="$XDG_CONFIG_HOME/banager"
+export bastore="$HOME/.local/share/banager/run"
+# Will figure out how to make a proper command at a later point
+flag_num=0
+for grab in curl wget; do
+    if command -v "$grab" &>/dev/null; then 
+        get="$grab"
+        break
+    else 
+        (( flag_num += 1 ))
     fi
 done
-# Dependencies are installed through ./src/builtin.plugin.sh
-# TODO: Add an input for the branch
-# Branch Options:
-# - stable (this will be just banager)
-# - unstable (in Arch this will be banager-git
-echo "Do you want [stable] or [unstable]? "
-read -r branch 
-case "$branch" in 
-    *unstable* | *UNSTABLE*) 
-        git clone --bare https://codeberg.org/RubyRose/banager
-        branch="main"
-        stable="unstable"
-        ;;
-    *stable* | *STABLE*) git clone --bare https://codeberg.org/RubyRose/banager/src/branch/stable
-        branch="unstable"
-        stable="stable"
-        ;;
-esac
-echo "Removing dev and useless files and folders..."
-rm -rf banager/install.sh banager/docs/
-
-if [ ! -f "${XDG_DATA_HOME:-$HOME/.local/share}/banager" ]; then 
-    echo "Making the data directory..."
-    mkdir "${XDG_DATA_HOME:-$HOME/.local/share}/banager"
-    echo "Made the banager data directory :)"
-    echo "Moving the data files..."
-    mv -fu ./banager/run/ ./banager/src/ "${XDG_DATA_HOME:-$HOME/.local/share}/banager"
-    echo "Moved data files"
+if [ "$flag_num" = 0 ]; then 
+    flag="-Lf --output"
+elif [ "$flag_num" = 1 ]; then 
+    flag="c4 --tries=3 --output-file="
 fi
-if [ ! -f "${XDG_CONFIG_HOME:-$HOME/.config}/banager" ]; then 
-    echo "Making the config directory..."
-    mkdir "${XDG_CONFIG_HOME:-$HOME/.config}/banager"
-    if [ ! -f "${XDG_CONFIG_HOME:-$HOME/.config}/banager/plugins" ]; then
-        echo "Making the plugin directory..."
-        mkdir "${XDG_CONFIG_HOME:-$HOME/.config}/banager/plugins"
-        echo "Made the plugin directory :)"
-    fi
-    echo "Made the config directory :)"
-fi
-if [ ! -f "${XDG_CACHE_HOME:-$HOME/.cache}/banager" ]; then 
-    echo "Making the cache directory..." 
-    mkdir "${XDG_CACHE_HOME:-$HOME/.cache}/banager"
-    if [ ! -f "${XDG_CACHE_HOME:-$HOME/.cache}/banager/user" ]; then
-        echo "Making the user cache..."
-        mkdir "${XDG_CACHE_HOME:-$HOME/.cache}/banager/user"
-        echo "Made the user cache :)"
-    fi
-    if [ ! -f "${XDG_CACHE_HOME:-$HOME/.cache}/banager/plugins" ]; then 
-        echo "Making the plugin cache..."
-        mkdir "${XDG_CACHE_HOME:-$HOME/.cache}/banager/plugins"
-        echo "Made the plugin cache :)"
-    fi
-    if [ ! -f "${XDG_CACHE_HOME:-$HOME/.cache}/banager/install" ]; then 
-        echo "Making the install cache..."
-        mkdir "${XDG_CACHE_HOME:-$HOME/.cache}/banager/install"
-        echo "Made install cache :)"
-        echo "Making the update cache file..."
-        touch "${XDG_CACHE_HOME:-$HOME/.cache}/banager/install/update.storage.sh"
-        echo -e "#!/usr/bin/env bash
-        \n# This was made from Banager's install.sh file
-        \n# This file is here for the \`\$ banager --update\` command\ninstalled_branch=$branch # This the $stable branch" >> "${XDG_CACHE_HOME:-$HOME/.cache}/banager/install/update.storage.sh"
-    fi
-    echo "Made the cache directory."
-fi
-echo "Install for [user] or [system]? "
-echo "On NixOS system, it's recommended to do user"
-read -r install_choice
-echo "Adding the command..."
-case "$install_choice" in 
-    *user* | *USER*) 
-        if [ ! -e "${XDG_BIN_HOME:-$HOME/.local/bin}/banager" ]; then 
-            echo "Adding command to user..."
-            mv -fu "$banampt"/src/banager/banager "${XDG_BIN_HOME:-$HOME/.local/bin}" 
-            echo "Added command to user :)"
-        else 
-            echo "The command is already installed on the user"
-        fi
-        echo "cmd_level=\"user\"" >> "${XDG_CACHE_HOME:-$HOME/.cache}/banager/install/update.storage.sh"
-        ;;
-    *sys*  | *SYS* ) 
-        if [ ! -e "/usr/local/bin/banager" ]; then
-            echo "Adding command to system..."
-            $SUPER mv -fu "$banampt"/src/banager/banager /usr/local/bin 
-            echo "Added command to system :)"
-        else 
-            echo "Command is already on the system"
-        fi
-        echo "cmd_level=\"system\"" >> "${XDG_CACHE_HOME:-$HOME/.cache}/banager/install/update.storage.sh"
-        ;;
-esac
-mv -fu ./banager/config/config.sh "${XDG_CONFIG_HOME:-$HOME/.config}"
-if [ -e "$HOME/.bashrc" ]; then 
-    mv -fu "$HOME"/.bashrc "$HOME"/.bashrc.bak
-    echo "Made .bashrc.bak"
-fi
-touch "$HOME"/.bashrc
-echo -e "#!/usr/bin/env bash
-\nbanager_config=\"\$XDG_DATA_HOME/banager/run/\"\n
+belp() {
+    echo -e "banager [FLAG] [ARG] [URL]
+    -h | --help: display this menu
+    -c | --config: lists the config location for you file
+    -p | --plugins: interact with plugins 
+        help: list all the arguments for banager -p 
+            aliased to banpelp
+        list: list out the installed plugins that's in ~/.config/banager/plugins/
+            aliased to banpist 
+        install | add: install a new plugin (requires a url to the raw bil
+            banager [-p | --plugins] [install|add] {RAW PLUGIN FILE URL}
+            aliased to banpadd
+        uninstall | remove | rm: remove an installed plugin 
+            banager [-p | --plugins] [uninstall|remove] {PLUGIN FILE}
+    -u | --update: updates banager"
+}
+pelp() {
+    echo -e "banager [-p | --plugins] [ARG] [URL]
+        help: display this menu 
+        list: show all the installed plugins 
+        install | add: install a new plugin 
+        uninstall| remove | rm: uninstall an existing plugin"
+}
+Banager() {
+    case "$1" in 
+        "-h" | "--help") 
+            belp 
+            return
+            ;; # This will be a function
+        "-c" | "--config") 
+            echo "$locate_config/config.sh"
+            shift 1
+            return
+            ;;
+        "-p" | "--plugins")
+            case "$2" in 
+                help) 
+                    pelp 
+                    shift 1R
+                    return 
+                    ;;
+                list) 
+                    echo -e "Installed plugins are:\n$(ls "$locate_config/plugins")" 
+                    shift 1
+                    return
+                    ;;
+                install | add) 
+                    arg="$3"
+                    if [ -z "$arg" ] || [ "${arg:0:1}" = "-" ]; then 
+                        echo -e "\e[31mError: No plugin after $2\e[0m"
+                        echo "To install plugins please do: \`\$ banager [-p|--plugins] [install|add] <RAW PLUGIN FILE URL>\`"
+                        return
+                    fi
+                    file="$HOME/.config/banager/plugins/$3.plugin.sh"
+                    case $3 in 
+                        *.*) "$get" "$flag$file" "$arg" ;;
+                        *) "$get" "$flag$file" "https://codeberg.org/RubyRose/blugins/raw/branch/main/plugins/$arg.plugin.sh" ;;
+                    esac
+                    shift 2
+                    ;;
+                uninstall | remove | rm)     
+                    arg="$3"
+                    if [ -e "${XDG_CONFIG_HOME:-$HOME/.config}/banager/plugins/$3.plugin.sh" ]; then
+                        echo "Do you want to remove $3.plugin.sh? "
+                        read -r confirmation 
+                        shopt -s nocasematch
+                        case "$confirmation" in
+                            yes)
+                                echo "removing $3.plugin.sh from ~/.config/banager/plugins"
+                                file="$3.plugin.sh"
+                                cd "$HOME/.config/banager/plugins/" || return
+                                rm -rf "$file"
+                                echo "removed $3.plugin.sh from ~/.config/banager/plugins"
+                                echo "removing $3.plugin.sh cache"
+                                rm -rf "${XDG_CACHE_HOME:-$HOME/.cache}/banager/plugin/$3.*.sh"
+                                ;;
+                            no) return ;;
+                        esac
+                    else 
+                        echo "You don't have that plugin installed. Nothing to remove"
+                    fi
+                    shift 2
+                    ;;
+                *)
+                    echo "BC1: Plugin Error 1: $2 argument doesn't exist for --plugins"
+                    shift 2 
+                    ;;
+            esac
+            # Probably will make more options for this
+            # TODO: Make this able to install plugins and have a sub-argument
+            ;;
+        "-u" | "--update" | "update") 
+            $get https://codeberg.org/RubyRose/banager/raw/branch/main/update.sh && sh update.sh && rm -rf ./update.sh 
+            shift 1
+            ;;
+    esac
+}
+alias banager=Banager
+alias banpelp='Banager -p help'
+alias banpist='Banager -p list'
+alias banpadd='Banager -p add'
+alias banprem='Banager -p rm'
 # shellcheck source=/dev/null
-\nsource -- \"\${XDG_DATA_HOME:-\$HOME/.local/share}/banager/run/config.sh\"" >> "$HOME"/.bashrc
-cd ../ || exit 1
-rm -rf "$banampt"
-echo "Installed."
-exit 0
+source -- "$locate_config"/config.sh
