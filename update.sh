@@ -4,8 +4,7 @@
 source -- "${XDG_CACHE_HOME:-$HOME/.cache}/banager/install/update.storage.sh"
 # shellcheck disable=SC2154
 echo "$installed_branch"
-git clone --bare "https://codeberg.org/RubyRose/banager.git"
-
+git clone --bare "https://codeberg.org/RubyRose/banager"
 if [ -f "${XDG_DATA_HOME:-$HOME/.local/share}/banager/" ]; then 
     if [ -f "${XDG_DATA_HOME:-$HOME/.local/share}/banager/run" ]; then 
         cp -fr --update=all ./banager/run "${XDG_DATA_HOME:-$HOME/.local/share}/banager" 
