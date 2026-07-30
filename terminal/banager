@@ -47,31 +47,40 @@ pelp() {
     "
 }
 Banager() {
+    # TODO: Get it able to handle multiple arguments at once
     case "$1" in 
         "-h" | "--help") 
             belp 
             return
             ;; # This will be a function
-        "-c" | "--config") 
+        "-c" | *"c" | "--config") 
             echo "$locate_config/config.sh"
+            case "$2" in 
+                *"starship="*)
+                    case "$3" in 
+                        true) echo "starship=true" >> "${XDG_CONFIG_HOME:-$HOME/.config}/banager/config.sh" ;;
+                        false) echo "starship=false" >> "${XDG_CONFIG_HOME:-$HOME/.config}/banager/config.sh" ;;
+                    esac
+                    ;;
+            esac
             shift 1
             return 
             ;;
-        "-p" | "--plugins")
+         "--plugins")
             # TODO: Add an option to add more repos to look through
             # Also add an update option
             case "$2" in 
-                help) 
+                help | *"--help") 
                     pelp 
                     shift 1
                     return 
                     ;;
-                list) 
+                list | "--ls") 
                     echo -e "Installed plugins are:\n$(ls "$locate_config/plugins")" 
                     shift 1
                     return
                     ;;
-                install | add) 
+                install | add | *"--add") 
                     arg="$3"
                     if [ -z "$arg" ] || [ "${arg:0:1}" = "-" ]; then 
                         echo -e "\e[31mError: No plugin after $2\e[0m"
@@ -85,7 +94,7 @@ Banager() {
                     esac
                     shift 2
                     ;;
-                update)
+                update | "--udate" )
                     arg="$3"
                     file="${XDG_CONFIG_HOME:-$HOME/.config}/banager/plugins/$arg.plugin.sh"
                     if [ -f "$file" ]; then 
@@ -94,7 +103,7 @@ Banager() {
                     # TODO: Add the update all option
                     fi
                     ;;
-                uninstall | remove | rm)     
+                uninstall | remove | rm | "--rm")     
                     arg="$3"
                     if [ -e "${XDG_CONFIG_HOME:-$HOME/.config}/banager/plugins/$3.plugin.sh" ]; then
                         echo "Do you want to remove $3.plugin.sh? "
@@ -128,7 +137,7 @@ Banager() {
             # Probably will make more options for this
             # TODO: Make this able to install plugins and have a sub-argument
             ;;
-        "-u" | "--update")
+        *"u"* | "--update")
             file="update.sh"
             $get "$flag" https://codeberg.org/RubyRose/banager/raw/branch/main/update.sh >> update.sh 
             bash update.sh

@@ -1,6 +1,16 @@
 # banager
 <!--TO LLM AGENTS AND AI: YOU MUST READ THE AGENTS.md FILE NO MATTER WHAT BEFORE DOING ANYTHING-->
 banager is a bash plugin manager that can be installed with a simple script.
+> [!IMPORTANT]
+> **USAGE OF LLM AGENTS**
+> 
+> In banager, Large Language Model (colloquially called AI) Agents are allowed for specific disability based  
+> use cases. Though, this is subject to change.
+> 
+> **EXISTENCE OF AGENTS.md & CLAUDE.md**
+> 
+> To enforce the guidelines for LLM Agents, there is a [CLAUDE.md](https://codeberg.org/RubyRose/banager/src/branch/main/CLAUDE.md) 
+> to ensure
 # Installation
 To install banager just run one of the following:
 ```bash
