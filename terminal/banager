@@ -2,6 +2,7 @@
 # TODO: Make a custom terminal command for banager to allow installation of and display of various things
 locate_config="$XDG_CONFIG_HOME/banager"
 export bastore="$HOME/.local/share/banager/run"
+
 # Will figure out how to make a proper command at a later point
 flag_num=0
 for grab in curl wget; do
@@ -19,6 +20,30 @@ else
     flag="-c4"
     output="--output-file="
 fi
+pudate() {
+    local arg
+    arg="$1"
+    file="$arg.plugin.sh"
+    if [ -f "${XDG_CONFIG_HOME:-$HOME/.config}/banager/plugins/$file" ]; then 
+        repo=$(cat "${XDG_CONFIG_HOME:-$HOME/.config}/banager/plugins/$file" | grep -m1 -oP '(?<=# source = ).*')
+        tmp_file=$(mktemp "$file.XXXXX")
+        if [ "$flag_num" = 0 ]; then
+            flags="$flag --silent"
+        else 
+            flags="$flag --quiet"
+        fi
+        $get "$flags" "$repo" >> "$tmp_file"
+        installed_version=$(cat "${XDG_CONFIG_HOME:-$HOME/.config}/banager/plugins/$file" | grep -m1 -oP '(?<=# version = .*)')
+        tmp_version=$(cat "$tmp_file" | grep -m1 -oP '(?<=# version = .*)')
+        if [ ! "$tmp_version" = "$installed_version" ]; then 
+            rm -f "${XDG_CONFIG_HOME:-$HOME/.config}/banager/plugins/$file"
+            mv "$tmp_file" "${XDG_CONFIG_HOME:-$HOME/.config}/banager/plugins/$file"  
+        else 
+            rm -f "$tmp_file"
+        fi
+        # TODO: Add the update all option
+    fi
+}
 belp() {
     echo -e "banager [FLAG] [ARG] [URL]
     -h | --help: display this menu
@@ -40,10 +65,10 @@ belp() {
 }
 pelp() {
     echo -e "banager [-p | --plugins] [ARG] [URL]
-        help: display this menu 
-        list: show all the installed plugins 
-        install | add: install a new plugin 
-        uninstall| remove | rm: uninstall an existing plugin
+        help | --help: display this menu 
+        list | --ls: show all the installed plugins 
+        install | add | --add: install a new plugin 
+        uninstall| remove | rm | --rm: uninstall an existing plugin
     "
 }
 Banager() {
@@ -53,10 +78,13 @@ Banager() {
             belp 
             return
             ;; # This will be a function
-        "-c" | *"c" | "--config") 
+        "-c" | "--config") 
             echo "$locate_config/config.sh"
-            case "$2" in 
-                *"starship="*)
+            case "$2" in
+                "help")
+                    echo -e "The help for --config in banager is Work In Progress"
+                    ;;
+                "starship=")
                     case "$3" in 
                         true) echo "starship=true" >> "${XDG_CONFIG_HOME:-$HOME/.config}/banager/config.sh" ;;
                         false) echo "starship=false" >> "${XDG_CONFIG_HOME:-$HOME/.config}/banager/config.sh" ;;
@@ -70,7 +98,7 @@ Banager() {
             # TODO: Add an option to add more repos to look through
             # Also add an update option
             case "$2" in 
-                help | *"--help") 
+                help | "--help") 
                     pelp 
                     shift 1
                     return 
@@ -80,7 +108,7 @@ Banager() {
                     shift 1
                     return
                     ;;
-                install | add | *"--add") 
+                install | add | "--add") 
                     arg="$3"
                     if [ -z "$arg" ] || [ "${arg:0:1}" = "-" ]; then 
                         echo -e "\e[31mError: No plugin after $2\e[0m"
@@ -96,12 +124,7 @@ Banager() {
                     ;;
                 update | "--udate" )
                     arg="$3"
-                    file="${XDG_CONFIG_HOME:-$HOME/.config}/banager/plugins/$arg.plugin.sh"
-                    if [ -f "$file" ]; then 
-                        repo=$(cat "$file" | grep -m1 -oP '(?<=# source = ).*')
-                        $get "$flag" "$output$file" "$repo"
-                    # TODO: Add the update all option
-                    fi
+                    pudate "$arg"
                     ;;
                 uninstall | remove | rm | "--rm")     
                     arg="$3"
@@ -137,7 +160,7 @@ Banager() {
             # Probably will make more options for this
             # TODO: Make this able to install plugins and have a sub-argument
             ;;
-        *"u"* | "--update")
+        "-u" | "--update")
             file="update.sh"
             $get "$flag" https://codeberg.org/RubyRose/banager/raw/branch/main/update.sh >> update.sh 
             bash update.sh
@@ -152,5 +175,6 @@ alias banpist='Banager -p list'
 alias banpadd='Banager -p add'
 alias banprem='Banager -p rm'
 alias banpup='Banager -p update'
+alias banup='Banager -u'
 # shellcheck source=/dev/null
 source -- "$locate_config"/config.sh
