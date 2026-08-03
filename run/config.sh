@@ -6,6 +6,7 @@ elif [ -e "/usr/local/bin/banager" ]; then
     source -- /usr/local/bin/banager 
 fi
 source -- "${XDG_CONFIG_HOME:-$HOME/.config}/banager/config.sh"
+source -- "${XDG_CONFIG_HOME:-$HOME/.config}/banager/alias.sh"
 config_dir="${XDG_CONFIG_HOME:-$HOME/.config}/banager"
 data_dir="${XDG_DATA_HOME:-$HOME/.local/share}/banager"
 cache_dir="${XDG_CACHE_HOME:-$HOME/.cache}/banager"
