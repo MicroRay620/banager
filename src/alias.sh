@@ -19,19 +19,21 @@ alias shoot='$SUPER pkill'
 alias pacadd='$SUPER $PKG_MGR $INSTALL' 
 alias pacrm='$SUPER $PKG_MGR $REMOVE'
 alias pacudate='$SUPER $PKG_MGR $UPDATE'
-if command -v gtrash &>/dev/null; then 
-    alias rm='gtrash put'
-fi
 
 # These are for if you have timeshift.
 # Don't use these if you don't have timeshift
 # timeshift is a good partition backup for everything except nixos
-if command -v timeshift &>/dev/null; then 
-    alias backup='$SUPER timeshift --create'
-    alias restore='$SUPER timeshift --restore --snapshot'
-    alias shotlist='$SUPER timeshift --list-snapshots'
-    alias killsnap='$SUPER timeshift --delete'
-    alias ukillsnap='$SUPER timeshift --delete-all --yes'
+# shellcheck disable=SC2154
+if [ "$time" = "true" ]; then
+    if command -v timeshift &>/dev/null; then 
+        alias backup='$SUPER timeshift --create'
+        alias restore='$SUPER timeshift --restore --snapshot'
+        alias shotlist='$SUPER timeshift --list-snapshots'
+        alias killsnap='$SUPER timeshift --delete'
+        alias ukillsnap='$SUPER timeshift --delete-all --yes'
+    else
+        echo -e "\e[31mBC1 Error: You have time enabled in banager/config.sh but timeshift isn't installed\e[0m"
+    fi
 fi
 # shellcheck disable=SC2154
 if [ "$yt_alias" = "true" ]; then 
@@ -42,11 +44,11 @@ if [ "$yt_alias" = "true" ]; then
     else 
         echo -e "\e[31mBC1: You have yt_alias set to true in your banager config but yt-dlp is not installed.\e[0m\n Please install install or set yt_alias to false"
     fi
+    if command -v youtube-tui &>/dev/null; then 
+        alias yt-tui="youtube-tui"
+    fi
 fi
 
 # NOTE: THESE ALIASES MAY BE REMOVED AT A LATER DATE
-if command -v youtube-tui &>/dev/null; then 
-    alias yt-tui="youtube-tui"
-fi
 
 
