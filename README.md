@@ -15,15 +15,15 @@ banager is a bash plugin manager that can be installed with a simple script.
 To install banager just run one of the following:
 ```bash
 # Unstable Branch
-curl -sSLO https://codeberg.org/RubyRose/banager/raw/branch/main/install.sh && 
-  chmod +x install.sh && 
-    sh ./install.sh && 
-      rm -rf ./install.sh 
-# or 
-wget -q https://codeberg.org/RubyRose/banager/raw/branch/main/install.sh && 
-  chmod +x install.sh && 
-    sh ./install.sh && 
-      rm -rf ./install.sh
+curl -Lf https://codeberg.org/RubyRose/banager/raw/branch/main/install.sh &&  
+    sh install.sh && 
+    rm -f install.sh 
+```
+If you prefer github and are using the [github mirror](https://github.com/MicroRay620/banager.git) then you will use:
+```bash 
+curl -Lf https://raw.githubysercontent.com/MicroRay620/banager/refs/heads/main/install.sh &&
+    sh install.sh &&
+    rm -f install.sh 
 ```
 ## Dependencies
 For functionality of this config, you will need [`ble.sh`](https://github.com/akinomyoga/ble.sh) installed on your system. 
@@ -33,9 +33,14 @@ Click on the link provided to install it.
 To install a plugin you can either do one of two things
  
 To find plugins, go to the [blugins](https://codeberg.org/RubyRose/blugins.git) repository to see the officially endorsed plugins
-## Method 1: Command 
+## Method 1: CLI Command 
+You can use `banager`'s custom CLI command to install plugins 
+```bash
+banager -p add <PLUGIN NAME OR RAW FILE> 
+``` 
+## Method 2: Command Run 
 You can use `curl` or `wget` in the `~/.config/banager/plugins`/`$HOME/.config/banager/plugins` directory.
-```
+```bash
 # In $HOME/.config/banager/plugins 
 # Using curl 
 cd ~/.config/banager/plugins  
@@ -43,7 +48,7 @@ curl -O <THE RAW PLUGIN FILE URL>
 # or using wget  
 wget -P ~/.config/banager/plugins <RAW PLUGIN FILE URL 
 ```
-## Method 2: Manual
+## Method 3: Manual
 You can also manually do this:
 ### Step 1: Make the plugin file
 In `~/.config/banager/plugins` (or `$HOME/.config/banager/plugins`, make the plugin file. 
