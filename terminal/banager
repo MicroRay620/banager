@@ -90,6 +90,36 @@ Banager() {
                         false) echo "starship=false" >> "${XDG_CONFIG_HOME:-$HOME/.config}/banager/config.sh" ;;
                     esac
                     ;;
+                "yt_alias=") 
+                    case "$3" in 
+                        true) echo "yt_alias=true" >> "${XDG_CONFIG_HOME:-$HOME/.config}/banager/config.sh" ;;
+                        false) echo "yt_alias=false" >> "${XDG_CONFIG_HOME:-$HOME/.config}/banager/config.sh" ;;
+                    esac
+                    ;;
+                "correction") 
+                    case "$3" in 
+                        true) echo "correction=true" >> "${XDG_CONFIG_HOME:-$HOME/.config}/banager/config.sh" ;;
+                        false) echo "correction=false" >> "${XDG_CONFIG_HOME:-$HOME/.config}/banager/config.sh" ;; 
+                    esac
+                    ;;
+                "starship")
+                    case "$3" in 
+                        true) echo "starship=true" >> "${XDG_CONFIG_HOME:-$HOME/.config}/banager/config.sh" ;;
+                        false) echo "starship=false" >> "${XDG_CONFIG_HOME:-$HOME/.config}/banager/config.sh" ;;
+                    esac
+                    ;;
+                "dirmember")
+                    case "$3" in 
+                        true) echo "dirmember=true" >> "${XDG_CONFIG_HOME:-$HOME/.config}/banager/config.sh" ;;
+                        false) echo "dirmember=false" >> "${XDG_CONFIG_HOME:-$HOME/.config}/banager/config.sh" ;; 
+                    esac
+                    ;;
+                "time") 
+                    case "$3" in 
+                        true) echo "time=true" >> "${XDG_CONFIG_HOME:-$HOME/.config}/banager/config.sh" ;;
+                        false) echo "time=false" >> "${XDG_CONFIG_HOME:-$HOME/.config}/banager/config.sh" ;; 
+                    esac
+                    ;;
             esac
             shift 1
             return 
