@@ -2,7 +2,6 @@
 # TODO: Make a custom terminal command for banager to allow installation of and display of various things
 locate_config="$XDG_CONFIG_HOME/banager"
 export bastore="$HOME/.local/share/banager/run"
-
 # Will figure out how to make a proper command at a later point
 flag_num=0
 for grab in curl wget; do
@@ -24,6 +23,7 @@ pudate() {
     local arg
     arg="$1"
     file="$arg.plugin.sh"
+    # TODO: Add an alternative check for the plugin in GitHub if the source is codeberg
     if [ -f "${XDG_CONFIG_HOME:-$HOME/.config}/banager/plugins/$file" ]; then 
         repo=$(cat "${XDG_CONFIG_HOME:-$HOME/.config}/banager/plugins/$file" | grep -m1 -oP '(?<=# source = ).*')
         tmp_file=$(mktemp "$file.XXXXX")
@@ -80,6 +80,8 @@ Banager() {
             ;; # This will be a function
         "-c" | "--config") 
             echo "$locate_config/config.sh"
+            # OPTIM: See if there is a faster way to do this 
+            # TODO: Add a check for if neither is true or false
             case "$2" in
                 "help")
                     echo -e "The help for --config in banager is Work In Progress"
@@ -167,7 +169,7 @@ Banager() {
                                 echo "removing $3.plugin.sh from ~/.config/banager/plugins"
                                 file="$3.plugin.sh"
                                 cd "$HOME/.config/banager/plugins/" || return
-                                rm -rf "$file"
+                                rm -f "$file"
                                 if [ -e "${XDG_CONFIG_HOME:-$HOME/.config}/banager/plugins/gtrash.plugin.sh" ]; then 
                                     # This is here to make it not take up any room on the device
                                     gtrash rm "$file"
