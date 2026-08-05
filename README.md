@@ -73,3 +73,7 @@ not generating the code. If you use these tools, please make sure to include wha
 - [ ] Make the NixOS flake
 - [ ] Get an IRC/Matrix chat for support and communication
 - [ ] A [Contributing.md](CONTRIBUTING.md)
+- [ ] Binaries:
+    - [ ] rpm binary 
+    - [ ] apt binary 
+    - [ ] pacman binary 
