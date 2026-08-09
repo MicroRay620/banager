@@ -15,13 +15,13 @@ banager is a bash plugin manager that can be installed with a simple script.
 To install banager just run one of the following:
 ```bash
 # Unstable Branch
-curl -Lf https://codeberg.org/RubyRose/banager/raw/branch/main/install.sh &&  
+curl -Lfo https://codeberg.org/RubyRose/banager/raw/branch/main/install.sh &&  
     sh install.sh && 
     rm -f install.sh 
 ```
 If you prefer github and are using the [github mirror](https://github.com/MicroRay620/banager.git) then you will use:
 ```bash 
-curl -Lf https://raw.githubysercontent.com/MicroRay620/banager/refs/heads/main/install.sh &&
+curl -Lfo https://raw.githubysercontent.com/MicroRay620/banager/refs/heads/main/install.sh &&
     sh install.sh &&
     rm -f install.sh 
 ```
