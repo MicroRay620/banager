@@ -59,6 +59,17 @@ Then you open the file in a text editor (like neovim, emacs, nano, or kate).
 Copy the plugin's contents (in the repository, it should be the `.plugin.sh` or `.plugin` file)
 ### Step 4: Paste the file contents 
 Then you paste the plugin's contents into the plugin file you made
+# Using Banager 
+With banager, you have the optional `banager` command that is added when you install this on your system. This provides you with some useful features that expands what you can do.
+- `-h` `--help`: will display the banager help menu 
+- `-c` `--config`: will append a configuration option to ~/.config/banager/config.sh 
+- `-p` `--plugins`: will allow plugin options for you to use. 
+    - `help`: displays all the arguments for banager.
+    - `list`: lists all installed plugins
+    - `install` `add`: adds a plugin to your config. 
+    - `update`: updates your plugins 
+    - `uninstall` `remove` `rm`: removes an installed plugin. 
+- `-u` `--update`: updates banager
 # Development
 As a programmer: I, [RubyRose](https://codeberg/RubyRose), understand that some people use things like Google Gemini, Claude Code, ChatGPT, GitHub Copilot, Microsoft 
 Copilot, and other Large Language Models to understand the code and learn the code. However, this project is meant for humans and to be used by humans. To keep it that way,
