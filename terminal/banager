@@ -187,7 +187,7 @@ Banager() {
             ;;
         "-u" | "--update")
             file="update.sh"
-            $get "$flag" https://codeberg.org/RubyRose/banager/raw/branch/main/update.sh >> update.sh 
+            $get "$flag"  https://raw.githubusercontent.com/MicroRay620/banager/refs/heads/main/update.sh >> update.sh 
             bash update.sh
             rm -f ./update.sh 
             shift 1
