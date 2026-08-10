@@ -9,20 +9,10 @@ source -- "${XDG_CONFIG_HOME:-$HOME/.config}/banager/config.sh"
 source -- "${XDG_CONFIG_HOME:-$HOME/.config}/banager/alias.sh"
 # All of these are to abide by the XDG standard
 # For more about these please go to: https://specifications.freedesktop.org/basedir/latest/
-config_dir="${XDG_CONFIG_HOME:-$HOME/.config}/banager"
 # NOTE: This is just making the cache directory
-if [ ! -e "${XDG_CACHE_HOME:-$HOME/.cache}/banager" ]; then 
-    mkdir "${XDG_CACHE_HOME:-$HOME/.cache}/banager"
-    if [ ! -e "${XDG_CACHE_HOME:-$HOME/.cache}/banager/user" ]; then 
-        mkdir "${XDG_CACHE_HOME:-$HOME/.https://specifications.freedesktop.org/basedir/latest/cache}/banager/user" 
-    fi
-    if [ ! -e "${XDG_CACHE_HOME:-$HOME/.cache}/banager/plugins" ]; then 
-        mkdir "${XDG_CACHE_HOME:-$HOME/.cache}/banager/plugins"
-    fi
-fi
-
-if [ ! -e "${XDG_DATA_HOME:-$HOME/.local/share}/banager/logs" ]; then
-    mkdir "${XDG_DATA_HOME:-$HOME/.local/share}/banager/logs"
+if [ ! -e "${XDG_CACHE_HOME:-$HOME/.cache}/banager" ] || [ ! -e "${XDG_DATA_HOME:-$HOME/.local/share}/banager/logs" ] ; then 
+    mkdir -p "${XDG_CACHE_HOME:-$HOME/.cache}/banager" "${XDG_CACHE_HOME:-$HOME/.cache}/banager/user"\
+        "${XDG_CACHE_HOME:-$HOME/.cache}/banager/plugins" "${XDG_DATA_HOME:-$HOME/.local/share}/banager/logs"
 fi
 # OPTIM: This was originally a for loop which would slow down banager on systems with less ram 
 date=$(date +"%Y.%m.%d")
@@ -32,7 +22,6 @@ if [ ! -e "${XDG_DATA_HOME:-$HOME/.local/share}/banager/logs/banager-$date.log" 
 else 
     date >> "${XDG_DATA_HOME:-$HOME/.local/share}/banager/logs/banager-$date.log"
 fi
-# shellcheck source=/dev/null
 source -- "${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/alias.sh"
 source -- "${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/builtin.plugin.sh"
 source -- "${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/enviroment.sh"
@@ -41,7 +30,7 @@ source -- "${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/declare.sh"
 # Plugins
 # This is for managing the plugins
 # shellcheck disable=SC2154
-for plugin_file in "$config_dir"/plugins/*.plugin*; do
+for plugin_file in "${XDG_CONFIG_HOME:-$HOME/.config}/banager"/plugins/*.plugin*; do
     plugin_path="${plugin_file##*\/}"
     invalid_plugin="${plugin_path%%.plugin.sh}"
     if [ -f "$plugin_file" ]; then
@@ -49,9 +38,10 @@ for plugin_file in "$config_dir"/plugins/*.plugin*; do
         # NOTE: This is here for debugging. 
         # Uncomment this if you want to test your plugin
         # echo "Reading $invalid_plugin.plugin.sh"
-        owner=$(cat "$plugin_file" | grep "# owner =")
-        shebang=$(cat "$plugin_file" | grep "#!banager/plugin")
-        if [ -n "$owner" ]; then
+        plugin=$(<"$plugin_file")
+        shebang=$(echo "$plugin" | grep "#!banager/plugin")
+        owner=$(echo "$plugin" | grep "# owner = ")
+        if [[ "$plugin" =~ "#!banager/plugin" ]] && [[ "$plugin" =~ "# owner = " ]]; then
             # shellcheck source=/dev/null
             source "$plugin_file"
             echo "${XDG_DATA_HOME:-$HOME/.local/share}/banager/run/config.sh: $plugin_file is enabled" >> "$log_file"
@@ -76,4 +66,7 @@ for plugin_file in "$config_dir"/plugins/*.plugin*; do
             fi
         fi
     fi
-done 
+done
+# OPTIMIZE: This code took ~3 seconds to load
+# Figure out a way to make it go faster
+
