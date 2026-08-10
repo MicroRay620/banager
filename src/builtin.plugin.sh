@@ -65,7 +65,7 @@ fi
 if [ "$correction" = "true" ]; then 
     if [ ! -e "${XDG_CACHE_HOME:-$HOME/.config}/banager/user/fix-cmd.sh" ]; then
         touch "${XDG_CACHE_HOME:-$HOME/.config}/banager/user/fix-cmd.sh"
-        echo -e "Your system has a correction tool [thefuck or pay-respect] installed.\nWould you like the alias enabled? [y/N] "
+        echo -e "Your system has a correction tool [thefuck or pay-respects] installed.\nWould you like the alias enabled? [y/N] "
         read -er alias_prompt 
         case "$alias_prompt" in 
             y | Y | *yes* | *Yes* | *YES*) 
@@ -98,7 +98,7 @@ if [ "$correction" = "true" ]; then
             *) auto_run="";
         esac
         eval "$(thefuck "$auto_run $alias_call")"
-    elif command -v pay-respect &>/dev/null; then 
+    elif command -v pay-respects &>/dev/null; then 
         if [ -z "$handler" ]; then 
             echo "Would you like the [command not found] handler? [y/N] "
             read -r cnf_handler
@@ -118,15 +118,15 @@ if [ "$correction" = "true" ]; then
         else 
             handle=""
         fi
-        eval "$(pay-respect "$alias_call $handle")"
+        eval "$(pay-respects "$alias_call $handle")"
     else 
         echo -e "REPO LINKS:\nhttps://github.com/nvbn/thefucks\nhttps://github.com/iffse/pay-respects"
-        echo "Would you like thefuck or pay-respect? "
+        echo "Would you like thefuck or pay-respects? "
         read -r correct_option
         shopt -s nocasematch
         case "$correct_option" in 
             thefuck) $SUPER "$PKG_MGR $INSTALL" thefuck ;;
-            pay-respect) 
+            pay-respects) 
                 if [ -e "${XDG_CONFIG_HOME:-$HOME/.config}/plugins/archlinux.plugin.sh" ]; then 
                     $AUR "$INSTALL" pay-respects 
                 else
