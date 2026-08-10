@@ -2,17 +2,21 @@
 # shellcheck source=/dev/null
 source /etc/os-release 
 source -- "${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/package_managers.sh"
+source -- "${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/declare.sh"
 source -- "${XDG_CONFIG_HOME:-$HOME/.config}/banager/config.sh"
-for supers in doas sudo sudo-rs; do
-    if command -v "$supers" &>/dev/null; then 
-        SUPER="$supers"
-        break 
-    else 
-        continue
-    fi
-done
+# OPTIMIZE: Changed the super for loop to if statements for speed
+if command -v doas &>/dev/null; then 
+    SUPER=doas 
+elif command -v sudo &>/dev/null; then 
+    SUPER=sudo 
+elif command -v sudo-rs &>/dev/null; then 
+    SUPER=sudo-rs 
+fi
+# shellcheck disable=SC2154
+# NOTE: This is found in ~/.local/banager/src/declare.sh
+echo "${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/alias.sh: \$SUPER is $SUPER" >> "$log_file"
 alias restart="reboot"
-alias posh="bash --posix"
+alias bosh="bash --posix" # INFO: This just means Bash pOsix SHell
 alias shoot='$SUPER pkill'
 # These make it easier for you to install packages without having to remember which package manager you're using or the arguements
 # For the info on this, the checks are under Package Manager Checks to
@@ -25,30 +29,33 @@ alias pacudate='$SUPER $PKG_MGR $UPDATE'
 # timeshift is a good partition backup for everything except nixos
 # shellcheck disable=SC2154
 if [ "$time" = "true" ]; then
+    echo "${XDG_CONFIG_HOME:-$HOME/.config}/banager/config.sh: \$time is enabled" >> "$log_file"
     if command -v timeshift &>/dev/null; then 
         alias backup='$SUPER timeshift --create'
         alias restore='$SUPER timeshift --restore --snapshot'
         alias shotlist='$SUPER timeshift --list-snapshots'
         alias killsnap='$SUPER timeshift --delete'
         alias ukillsnap='$SUPER timeshift --delete-all --yes'
+        echo -e "${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/alias.sh: timeshift command found; enabled timeshift aliases" >> "$log_file"
     else
         echo -e "\e[31mBC1 Error: You have time enabled in banager/config.sh but timeshift isn't installed\e[0m"
+        echo -e "${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/alias.sh: timeshift command not found" >> "$log_file"
     fi
 fi
 # shellcheck disable=SC2154
 if [ "$yt_alias" = "true" ]; then 
+    echo "${XDG_CONFIG_HOME:-$HOME/.config}/banager/config.sh: \$yt_alias is enabled" >> "$log_file"
     if command -v yt-dlp &>/dev/null; then 
         alias yt-dlp='yt-dlp -4w --no-cookies-from-browser --audio-quality 0 ' # A change for the defauult command
         alias mp3-dl="yt-dlp --audio-format mp3" # Good for downloading mp3 files
         alias svr-download="yt-dlp --write-info-json --write-subs --no-write-auto-subs" # This is intended for adding videos to a database/server
+        echo -e "${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/alias.sh: yt-dlp command found; enabled yt-dlp aliases" >> "$log_file"
     else 
         echo -e "\e[31mBC1: You have yt_alias set to true in your banager config but yt-dlp is not installed.\e[0m\n Please install install or set yt_alias to false"
+        echo -e "${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/alias.sh: yt-dlp command not found" >> "$log_file"
     fi
     if command -v youtube-tui &>/dev/null; then 
         alias yt-tui="youtube-tui"
+        echo -e "${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/alias.sh: youtube-tui command found; enabled youtube-tui alias" >> "$log_file"
     fi
 fi
-
-# NOTE: THESE ALIASES MAY BE REMOVED AT A LATER DATE
-
-
