@@ -5,7 +5,7 @@
 # shellcheck source=/dev/null
 source -- /etc/os-release
 source -- "${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/declare.sh"
-source -- "${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/package_manager.sh"
+source -- "${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/package_managers.sh"
 source -- "${XDG_CONFIG_HOME:-$HOME/.config}/banager/config.sh"
 # Because of how common it is for people to use syntax highlighting and command completion there is no option to enable or disable this
 if [ "$ID" = "nixos" ] || [ "$ID_LIKE" = "nixos" ] ; then 
