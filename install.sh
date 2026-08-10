@@ -22,8 +22,8 @@ echo "Do you want [stable] or [unstable]? "
 read -r branch 
 # TODO: Add a check for github mirror
 case "$branch" in 
-    *unstable* | *UNSTABLE*) git clone --bare https://codeberg.org/RubyRose/banager.git ;;
-    *stable* | *STABLE*) git clone --bare https://codeberg.org/RubyRose/banager/src/stable.git ;;
+    *unstable* | *UNSTABLE*) git clone https://codeberg.org/RubyRose/banager.git ;;
+    *stable* | *STABLE*) git clone https://codeberg.org/RubyRose/banager/src/stable.git ;;
 esac
 echo "Removing dev and useless files and folders..."
 rm -rf banager/install.sh banager/docs/
