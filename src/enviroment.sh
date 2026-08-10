@@ -1,10 +1,8 @@
 #!/usr/bin/env bash
 # shellcheck source=/dev/null
-source -- "${XDG_DATA_HOME:-$HOME/.local/share}/banager/run/declare.sh"
+source -- "${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/declare.sh"
 if [ ! -e "${XDG_CACHE_HOME:-$HOME/.cache}/banager/user/enviroment.path.save.sh" ]; then
-    cd "$XDG_CONFIG_HOME"/banager/user/ || exit 1
-    cd "$HOME" || return
-    touch "env.sh"
+    touch "${XDG_CACHE_HOME:-$HOME/.cache}/banager/user/enviroment.path.save.sh"
     echo "What's your default text editor? "
     read -r text_editor 
     if [ "$text_editor" = "neovim" ]; then 
