@@ -20,6 +20,7 @@ done
 # - unstable (in Arch this will be banager-git
 echo "Do you want [stable] or [unstable]? "
 read -r branch 
+# TODO: Add a check for github mirror
 case "$branch" in 
     *unstable* | *UNSTABLE*) git clone --bare https://codeberg.org/RubyRose/banager.git ;;
     *stable* | *STABLE*) git clone --bare https://codeberg.org/RubyRose/banager/src/stable.git ;;
