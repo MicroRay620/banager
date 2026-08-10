@@ -104,22 +104,17 @@ if [ "$correction" = "true" ]; then
             read -r cnf_handler
             case "$cnf_handler" in 
                 y | Y) 
-                    echo "handler=true" >> "${XDG_CACHE_HOME:-$HOME/.cache}/banager/user/fix-cmd.sh" 
+                    echo "handler=true" >> "${XDG_CACHE_HOME:-$HOME/.cache}/banager/user/pay.plugin.user.sh" 
                     handler=true
                     ;;
                 *) 
-                    echo "handler=false" >> "${XDG_CACHE_HOME:-$HOME/.cache}/banager/user/fix-cmd.sh" 
+                    echo "handler=false" >>  "${XDG_CACHE_HOME:-$HOME/.cache}/banager/user/pay.plugin.user.sh" 
                     handler=false
                     ;;
             esac
         fi
-        if [ "$handler" = "true" ]; then
-            handle="--nocnf"
-        else 
-            handle=""
-        fi
-        eval "$(pay-respects "$alias_call $handle")"
-    else 
+        eval "$(pay-respects bash)" #"$alias_call")"
+    else
         echo -e "REPO LINKS:\nhttps://github.com/nvbn/thefucks\nhttps://github.com/iffse/pay-respects"
         echo "Would you like thefuck or pay-respects? "
         read -r correct_option
@@ -141,3 +136,4 @@ if [ "$correction" = "true" ]; then
         esac
     fi
 fi
+
