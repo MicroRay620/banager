@@ -4,8 +4,8 @@
 source -- "${XDG_CACHE_HOME:-$HOME/.cache}/banager/install/update.storage.sh"
 # shellcheck disable=SC2154
 echo "$installed_branch"
-# TODO: Add a check for github mirror
-git clone "https://codeberg.org/RubyRose/banager"
+# Uses GitHub for stability and uptime
+git clone "https://github.com/MicroRay620/banager"
 if [ -f "${XDG_DATA_HOME:-$HOME/.local/share}/banager/" ]; then 
     if [ -e "${XDG_DATA_HOME:-$HOME/.local/share}/banager/run" ]; then 
         rm -f "${XDG_DATA_HOME:-$HOME/.local/share}/banager/run"
