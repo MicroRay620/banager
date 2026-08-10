@@ -19,8 +19,4 @@ fi
 if [ -e "${XDG_BIN_HOME:-$HOME/.local/bin}/banager" ]; then 
     cp -fr --update=all ./banager/terminal/banager "${XDG_BIN_HOME:-$HOME/bin}/banager"
 fi
-if [ -e "${XDG_CONFIG_HOME:-$HOME/.config}/banager/plugins/gtrash.plugin.sh" ]; then 
-    rm -rf banager/
-else 
-    rm -rf banager/
-fi
+
