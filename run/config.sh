@@ -28,6 +28,9 @@ fi
 date=$(date +"%Y.%m.%d")
 if [ ! -e "${XDG_DATA_HOME:-$HOME/.local/share}/banager/logs/banager-$date.log" ]; then 
     touch "${XDG_DATA_HOME:-$HOME/.local/share}/banager/logs/banager-$date.log"
+    date >> "${XDG_DATA_HOME:-$HOME/.local/share}/banager/logs/banager-$date.log"
+else 
+    date >> "${XDG_DATA_HOME:-$HOME/.local/share}/banager/logs/banager-$date.log"
 fi
 # shellcheck source=/dev/null
 source -- "${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/alias.sh"
