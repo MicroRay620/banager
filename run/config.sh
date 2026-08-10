@@ -7,29 +7,26 @@ elif [ -e "/usr/local/bin/banager" ]; then
 fi
 source -- "${XDG_CONFIG_HOME:-$HOME/.config}/banager/config.sh"
 source -- "${XDG_CONFIG_HOME:-$HOME/.config}/banager/alias.sh"
+# All of these are to abide by the XDG standard
+# For more about these please go to: https://specifications.freedesktop.org/basedir/latest/
 config_dir="${XDG_CONFIG_HOME:-$HOME/.config}/banager"
-data_dir="${XDG_DATA_HOME:-$HOME/.local/share}/banager"
-cache_dir="${XDG_CACHE_HOME:-$HOME/.cache}/banager"
-if [ ! -e "${XDG_CONFIG_HOME:-$HOME/.config}/banager/user" ]; then
-    mkdir "$config_dir/user"
-fi 
+# NOTE: This is just making the cache directory
 if [ ! -e "${XDG_CACHE_HOME:-$HOME/.cache}/banager" ]; then 
-    mkdir "$cache_dir"
+    mkdir "${XDG_CACHE_HOME:-$HOME/.cache}/banager"
+    if [ ! -e "${XDG_CACHE_HOME:-$HOME/.cache}/banager/user" ]; then 
+        mkdir "${XDG_CACHE_HOME:-$HOME/.https://specifications.freedesktop.org/basedir/latest/cache}/banager/user" 
+    fi
+    if [ ! -e "${XDG_CACHE_HOME:-$HOME/.cache}/banager/plugins" ]; then 
+        mkdir "${XDG_CACHE_HOME:-$HOME/.cache}/banager/plugins"
+    fi
 fi
-# Commands
-for cmd_file in "$data_dir"/src/*; do
-    # echo "$cmd_file"
-    if [ -f "$cmd_file" ]; then
-        # NOTE: declare.sh is only for plugins and some files 
-        # It isn't needed to be sourced
-        if [ ! "$cmd_file" = "${XDG_DATA_HOME:-$HOME/.local/share}/banager/commands/declare.sh" ]; then
-            # shellcheck source=/dev/null
-            source "$cmd_file"
-        else 
-            continue 
-        fi
-   fi
-done
+
+# shellcheck source=/dev/null
+# OPTIM: This was originally a for loop which would slow down banager on systems with less ram 
+source -- "${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/alias.sh"
+source -- "${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/builtin.plugin.sh"
+source -- "${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/enviroment.sh"
+
 # Plugins
 # This is for managing the plugins
 # shellcheck disable=SC2154
@@ -63,15 +60,3 @@ for plugin_file in "$config_dir"/plugins/*.plugin*; do
         fi
     fi
 done 
-if [ -f "$config_dir/plugins/gtrash.plugin.sh" ]; then 
-    touch "$cache_dir/gtrash.sh" 
-    if command -v gtrash &>/dev/null; then 
-        gtrash completion bash >> "$cache_dir/gtrash.sh"
-    fi
-fi
-if [ -e "${XDG_CONFIG_HOME:-$HOME/.config}/plugins/fetch.plugin.sh" ]; then 
-    source -- "$config_dir/fletch.plugin.sh"
-    if [ "$display_flag" = "true" ]; then
-        Flag
-    fi
-fi
