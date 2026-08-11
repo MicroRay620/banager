@@ -5,6 +5,17 @@ if [ -e "${XDG_BIN_HOME:-$HOME/.local/bin}/banager" ]; then
 elif [ -e "/usr/local/bin/banager" ]; then 
     source -- /usr/local/bin/banager 
 fi
+date=$(date +"%Y.%m.%d")
+if [ ! -e "${XDG_DATA_HOME:-$HOME/.local/share}/banager/logs/banager-$date.log" ]; then 
+    touch "${XDG_DATA_HOME:-$HOME/.local/share}/banager/logs/banager-$date.log"
+    date +"%T">> "${XDG_DATA_HOME:-$HOME/.local/share}/banager/logs/banager-$date.log"
+else 
+    date +"%T" >> "${XDG_DATA_HOME:-$HOME/.local/share}/banager/logs/banager-$date.log"
+fi
+source -- "${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/alias.sh"
+source -- "${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/builtin.plugin.sh"
+source -- "${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/enviroment.sh"
+source -- "${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/declare.sh"
 source -- "${XDG_CONFIG_HOME:-$HOME/.config}/banager/config.sh"
 source -- "${XDG_CONFIG_HOME:-$HOME/.config}/banager/alias.sh"
 # All of these are to abide by the XDG standard
@@ -14,18 +25,6 @@ if [ ! -e "${XDG_CACHE_HOME:-$HOME/.cache}/banager" ] || [ ! -e "${XDG_DATA_HOME
     mkdir -p "${XDG_CACHE_HOME:-$HOME/.cache}/banager" "${XDG_CACHE_HOME:-$HOME/.cache}/banager/user"\
         "${XDG_CACHE_HOME:-$HOME/.cache}/banager/plugins" "${XDG_DATA_HOME:-$HOME/.local/share}/banager/logs"
 fi
-# OPTIM: This was originally a for loop which would slow down banager on systems with less ram 
-date=$(date +"%Y.%m.%d")
-if [ ! -e "${XDG_DATA_HOME:-$HOME/.local/share}/banager/logs/banager-$date.log" ]; then 
-    touch "${XDG_DATA_HOME:-$HOME/.local/share}/banager/logs/banager-$date.log"
-    date >> "${XDG_DATA_HOME:-$HOME/.local/share}/banager/logs/banager-$date.log"
-else 
-    date >> "${XDG_DATA_HOME:-$HOME/.local/share}/banager/logs/banager-$date.log"
-fi
-source -- "${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/alias.sh"
-source -- "${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/builtin.plugin.sh"
-source -- "${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/enviroment.sh"
-source -- "${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/declare.sh"
 
 # Plugins
 # This is for managing the plugins
@@ -67,6 +66,3 @@ for plugin_file in "${XDG_CONFIG_HOME:-$HOME/.config}/banager"/plugins/*.plugin*
         fi
     fi
 done
-# OPTIMIZE: This code took ~3 seconds to load
-# Figure out a way to make it go faster
-
