@@ -2,11 +2,12 @@
 # shellcheck disable=SC2154 source=/dev/null
 source -- "${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/declare.sh"
 source -- "${XDG_CONFIG_HOME:-$HOME/.config}/banager/config"
+echo -e "${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/enviroment.sh: loaded config file" >> "$log_file"
 if command -v "$text" &>/dev/null; then 
-    echo -e "${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/enviroment.sh: loaded config file" >> "$log_file"
     echo -e "${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/enviroment.sh: config: text variable is valid editor" >> "$log_file"
 else
-    echo -e 
+    echo -e "\e[31m${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/enviroment.sh: config: Error BC3.2: text variable is invalid" >> "$log_file"
+    exit 3
 fi
 export RUST_BACKTRACE=1
 export HISTFILE=~/.bash_history
