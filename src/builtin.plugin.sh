@@ -1,42 +1,63 @@
 #!/usr/bin/env bash
+# shellcheck disable=SC2154 source=/dev/null
 # This file is for all the built-in/pre-installed plugins for banager
 # blesh is one of the few built-in banager plugins
 # What this enabled is stuff like syntax highlighting and more 
-# shellcheck source=/dev/null
 source -- /etc/os-release
 source -- "${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/declare.sh"
 source -- "${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/package_managers.sh"
 source -- "${XDG_CONFIG_HOME:-$HOME/.config}/banager/config.sh"
 # Because of how common it is for people to use syntax highlighting and command completion there is no option to enable or disable this
+dependency=false
+echo "${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/builtin.plugin.sh: Checking Dependency: ble.sh" >> "$log_file"
 if [ "$ID" = "nixos" ] || [ "$ID_LIKE" = "nixos" ] ; then 
-    # shellcheck source=/dev/null
-    source -- "$(blesh-share)"/ble.sh
-    echo "You're on NixOS: please add blesh to the packages installed"
+    if command -v blesh-share &>/dev/null; then  
+        source -- "$(blesh-share)"/ble.sh
+        level="system"
+        echo "${XDG}"
+        dependency=true 
+    else
+        echo -e "\e[31m${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/builtin.plugin.sh: Error:BC1: blesh not installed\e[0m" >> "$log_file"
+        exit 1
+    fi
 elif [ "$ID" = "archlinux" ] || [ "$ID_LIKE" = "archlinux" ]; then
     if [ -e "${XDG_CONFIG_HOME:-$HOME/.config}/banager/plugins/archlinux.plugin.sh" ]; then
         if command -v ble-opt &>/dev/null; then 
             source /usr/share/blesh/ble.sh
+            level="system"
         else 
             $AUR "$SKIP_CONF $INSTALL" blesh 
             source /usr/share/blesh/ble.sh
+            level="system"
         fi
+        dependency=true
     fi
 else
-    git clone --recursive --depth 1 --shallow-submodules https://github.com/akinomyoga/ble.sh.git
-    make -C ble.sh install PREFIX=~/.local
-    # shellcheck source=/dev/null disable=SC2154
+    if [ -e "${XDG_DATA_HOME:-$HOME/.local/share}/blesh/ble.sh" ]; then
+        git clone --recursive --depth 1 --shallow-submodules https://github.com/akinomyoga/ble.sh.git
+        make -C ble.sh install PREFIX=~/.local
+    fi
     source -- "${XDG_DATA_HOME:-$HOME/.local/share}/blesh/ble.sh"
+    level="user"
+    dependency=true
 fi
-# starship
-# shellcheck disable=SC2154
+if [ "$dependency" = true ]; then 
+    echo -e "${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/builtin.plugin.sh: Dependency Found: ble.sh" >> "$log_file"
+    echo -e "${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/builtin.plugin.sh: Dependency: ble.sh: installed at $level level" >> "$log_file"
+fi
+
 if [ "$starship" = "true" ]; then 
-    if command -v starship &>/dev/null; then 
+    echo -e "${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/builtin.plugin.sh: ${XDG_CONFIG_HOME:-$HOME/.config}/banager/config.sh 'starship' set to true"
+    if command -v starship &>/dev/null; then
+        echo -e "${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/builtin.plugin.sh: Config Dependency: starship: command found"
         if [ ! -e "${XDG_CACHE_HOME:-$HOME/.cache}/banager/user/starship.completion.sh" ]; then 
             touch "${XDG_CACHE_HOME:-$HOME/.cache}/banager/user/starship.completion.sh"
             starship completions bash >> "${XDG_CACHE_HOME:-$HOME/.cache}/banager/user/starship.completion.sh"
             source -- "${XDG_CACHE_HOME:-$HOME/.cache}/banager/user/starship.completion.sh"
+            echo -e "${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/builtin.plugin.sh: Config Dependency: starship: completion did not exist: created completion file in cache"
         else 
             source -- "${XDG_CACHE_HOME:-$HOME/.cache}/banager/user/starship.completion.sh"
+            echo -e "${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/builtin.plugin.sh: Config Dependency: starship: completion exists"
         fi
         if [ ! -e "${XDG_CONFIG_HOME:-$HOME/.config}/starship.toml" ]; then
             touch "${XDG_CONFIG_HOME:-$HOME/.config}/starship.toml"
@@ -46,10 +67,10 @@ if [ "$starship" = "true" ]; then
         else 
             eval "$(starship init bash)"
         fi
+    else 
+        echo -e "\e[31m${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/builtin.plugin.sh: Error BC1: starship not installed\e[0m" >> "$log_file"
     fi
 fi
-# zoxide 
-# shellcheck disable=SC2154
 if [ "$dirmember" = "true" ]; then
     if command -v zoxide &>/dev/null; then 
         eval "$(zoxide init bash --cmd cd)"
@@ -58,11 +79,12 @@ if [ "$dirmember" = "true" ]; then
             $SUPER "$PKG_MGR $INSTALL" zoxide 
         fi
         echo -e "\e[31mBC1: You have the zoxide plugin but zoxide isn't installed.\e[0m" 
+        echo -e "\e[31m${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/builtin.plugin.sh: Error BC1: zoxide not installed\e[0m" >> "$log_file"
     fi
 fi
 # command correction
-# shellcheck disable=SC2154
-if [ "$correction" = "true" ]; then 
+if [ "$correction" = "true" ]; then
+    # TODO: add log data
     if [ ! -e "${XDG_CACHE_HOME:-$HOME/.config}/banager/user/fix-cmd.sh" ]; then
         touch "${XDG_CACHE_HOME:-$HOME/.config}/banager/user/fix-cmd.sh"
         echo -e "Your system has a correction tool [thefuck or pay-respects] installed.\nWould you like the alias enabled? [y/N] "
@@ -113,7 +135,7 @@ if [ "$correction" = "true" ]; then
                     ;;
             esac
         fi
-        eval "$(pay-respects bash)" #"$alias_call")"
+        eval "$(pay-respects "$alias_call" "$handler" bash)"
     else
         echo -e "REPO LINKS:\nhttps://github.com/nvbn/thefucks\nhttps://github.com/iffse/pay-respects"
         echo "Would you like thefuck or pay-respects? "
