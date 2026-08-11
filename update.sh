@@ -6,7 +6,7 @@ source -- "${XDG_CACHE_HOME:-$HOME/.cache}/banager/install/update.storage.sh"
 echo "$installed_branch"
 # Uses GitHub for stability and uptime
 git clone "https://github.com/MicroRay620/banager"
-if [ -f "${XDG_DATA_HOME:-$HOME/.local/share}/banager/" ]; then 
+if [ -e "${XDG_DATA_HOME:-$HOME/.local/share}/banager/" ]; then 
     if [ -e "${XDG_DATA_HOME:-$HOME/.local/share}/banager/run" ]; then 
         echo "Updating banager/run..."
         rm -f "${XDG_DATA_HOME:-$HOME/.local/share}/banager/run"
