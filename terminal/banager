@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# shellcheck disable=SC2154 source=/dev/null
+source -- "${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/declare.sh"
 locate_config="$XDG_CONFIG_HOME/banager"
 export bastore="$HOME/.local/share/banager/run"
 flag_num=0
@@ -195,6 +197,10 @@ Banager() {
             ;;
         "-b" | "--backup")
             # TODO: Figure out how to make a backup archive of the core files
+            ;;
+        "--log") 
+            cat "${XDG_DATA_HOME:-$HOME/.local/share}/banager/logs/$log_file"
+            shift 1
             ;;
     esac
 }
