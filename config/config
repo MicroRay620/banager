@@ -1,0 +1,12 @@
+#!/bin/bash
+# shellcheck disable=SC2034
+# Use plugins at your own risk
+# yt_alias=true
+# correction=true
+# starship=true 
+# dirmember=true  
+# time=true 
+# Text is for the src/enviroment.sh
+# This determines your text editor
+text="your text editor"
+
