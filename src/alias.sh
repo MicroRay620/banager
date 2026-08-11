@@ -1,10 +1,9 @@
 #!/usr/bin/env bash
-# shellcheck source=/dev/null
+# shellcheck disable=SC2154 source=/dev/null
 source /etc/os-release 
 source -- "${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/package_managers.sh"
 source -- "${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/declare.sh"
-source -- "${XDG_CONFIG_HOME:-$HOME/.config}/banager/config.sh"
-# OPTIMIZE: Changed the super for loop to if statements for speed
+source -- "${XDG_CONFIG_HOME:-$HOME/.config}/banager/config"
 if command -v doas &>/dev/null; then 
     SUPER=doas 
 elif command -v sudo &>/dev/null; then 
@@ -12,7 +11,6 @@ elif command -v sudo &>/dev/null; then
 elif command -v sudo-rs &>/dev/null; then 
     SUPER=sudo-rs 
 fi
-# shellcheck disable=SC2154
 # NOTE: This is found in ~/.local/banager/src/declare.sh
 echo "${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/alias.sh: \$SUPER is $SUPER" >> "$log_file"
 alias restart="reboot"
@@ -27,7 +25,6 @@ alias pacudate='$SUPER $PKG_MGR $UPDATE'
 # These are for if you have timeshift.
 # Don't use these if you don't have timeshift
 # timeshift is a good partition backup for everything except nixos
-# shellcheck disable=SC2154
 if [ "$time" = "true" ]; then
     echo "${XDG_CONFIG_HOME:-$HOME/.config}/banager/config.sh: \$time is enabled" >> "$log_file"
     if command -v timeshift &>/dev/null; then 
@@ -39,10 +36,10 @@ if [ "$time" = "true" ]; then
         echo -e "${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/alias.sh: timeshift command found; enabled timeshift aliases" >> "$log_file"
     else
         echo -e "\e[31mBC1 Error: You have time enabled in banager/config.sh but timeshift isn't installed\e[0m"
-        echo -e "${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/alias.sh: timeshift command not found" >> "$log_file"
+        echo -e "\e[31m${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/alias.sh: Error:BC1: timeshift command not installed\e[0m" >> "$log_file"
+        exit 1
     fi
 fi
-# shellcheck disable=SC2154
 if [ "$yt_alias" = "true" ]; then 
     echo "${XDG_CONFIG_HOME:-$HOME/.config}/banager/config.sh: \$yt_alias is enabled" >> "$log_file"
     if command -v yt-dlp &>/dev/null; then 
@@ -52,7 +49,8 @@ if [ "$yt_alias" = "true" ]; then
         echo -e "${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/alias.sh: yt-dlp command found; enabled yt-dlp aliases" >> "$log_file"
     else 
         echo -e "\e[31mBC1: You have yt_alias set to true in your banager config but yt-dlp is not installed.\e[0m\n Please install install or set yt_alias to false"
-        echo -e "${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/alias.sh: yt-dlp command not found" >> "$log_file"
+        echo -e "\e[31m${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/alias.sh: Error BC1: yt-dlp command not installed\e[0m" >> "$log_file"
+        exit 1
     fi
     if command -v youtube-tui &>/dev/null; then 
         alias yt-tui="youtube-tui"
