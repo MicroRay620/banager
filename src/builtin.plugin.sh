@@ -6,7 +6,7 @@
 source -- /etc/os-release
 source -- "${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/declare.sh"
 source -- "${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/package_managers.sh"
-source -- "${XDG_CONFIG_HOME:-$HOME/.config}/banager/config.sh"
+source -- "${XDG_CONFIG_HOME:-$HOME/.config}/banager/config"
 # Because of how common it is for people to use syntax highlighting and command completion there is no option to enable or disable this
 dependency=false
 echo "${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/builtin.plugin.sh: Checking Dependency: ble.sh" >> "$log_file"
@@ -47,7 +47,7 @@ if [ "$dependency" = true ]; then
 fi
 
 if [ "$starship" = "true" ]; then 
-    echo -e "${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/builtin.plugin.sh: ${XDG_CONFIG_HOME:-$HOME/.config}/banager/config.sh 'starship' set to true"
+    echo -e "${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/builtin.plugin.sh: ${XDG_CONFIG_HOME:-$HOME/.config}/banager/config 'starship' set to true"
     if command -v starship &>/dev/null; then
         echo -e "${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/builtin.plugin.sh: Config Dependency: starship: command found"
         if [ ! -e "${XDG_CACHE_HOME:-$HOME/.cache}/banager/user/starship.completion.sh" ]; then 
@@ -121,7 +121,7 @@ if [ "$correction" = "true" ]; then
         esac
         eval "$(thefuck "$auto_run $alias_call")"
     elif command -v pay-respects &>/dev/null; then 
-        if [ -z "$handler" ]; then 
+        if [ ! -v "$handler" ]; then 
             echo "Would you like the [command not found] handler? [y/N] "
             read -r cnf_handler
             case "$cnf_handler" in 
@@ -134,6 +134,9 @@ if [ "$correction" = "true" ]; then
                     handler=false
                     ;;
             esac
+            source -- "${XDG_CACHE_HOME:-$HOME/.cache}/banager/user/pay.plugin.user.sh"
+        else 
+            source -- "${XDG_CACHE_HOME:-$HOME/.cache}/banager/user/pay.plugin.user.sh"
         fi
         eval "$(pay-respects "$alias_call" "$handler" bash)"
     else

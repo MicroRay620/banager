@@ -80,7 +80,7 @@ Banager() {
             return
             ;; # This will be a function
         "-c" | "--config") 
-            echo "$locate_config/config.sh"
+            echo "$locate_config/config"
             # OPTIM: See if there is a faster way to do this 
             # TODO: Add a check for if neither is true or false
             case "$2" in
@@ -89,32 +89,32 @@ Banager() {
                     ;;
                 "yt_alias")
                     case "$3" in 
-                        true) echo "yt_alias=true" >> "${XDG_CONFIG_HOME:-$HOME/.config}/banager/config.sh" ;;
-                        false) echo "yt_alias=false" >> "${XDG_CONFIG_HOME:-$HOME/.config}/banager/config.sh" ;;
+                        true) echo "yt_alias=true" >> "${XDG_CONFIG_HOME:-$HOME/.config}/banager/config" ;;
+                        false) echo "yt_alias=false" >> "${XDG_CONFIG_HOME:-$HOME/.config}/banager/config" ;;
                     esac
                     ;;
                 "correction") 
                     case "$3" in 
-                        true) echo "correction=true" >> "${XDG_CONFIG_HOME:-$HOME/.config}/banager/config.sh" ;;
-                        false) echo "correction=false" >> "${XDG_CONFIG_HOME:-$HOME/.config}/banager/config.sh" ;; 
+                        true) echo "correction=true" >> "${XDG_CONFIG_HOME:-$HOME/.config}/banager/config" ;;
+                        false) echo "correction=false" >> "${XDG_CONFIG_HOME:-$HOME/.config}/banager/config" ;; 
                     esac
                     ;;
                 "starship")
                     case "$3" in 
-                        true) echo "starship=true" >> "${XDG_CONFIG_HOME:-$HOME/.config}/banager/config.sh" ;;
-                        false) echo "starship=false" >> "${XDG_CONFIG_HOME:-$HOME/.config}/banager/config.sh" ;;
+                        true) echo "starship=true" >> "${XDG_CONFIG_HOME:-$HOME/.config}/banager/config" ;;
+                        false) echo "starship=false" >> "${XDG_CONFIG_HOME:-$HOME/.config}/banager/config" ;;
                     esac
                     ;;
                 "dirmember")
                     case "$3" in 
-                        true) echo "dirmember=true" >> "${XDG_CONFIG_HOME:-$HOME/.config}/banager/config.sh" ;;
-                        false) echo "dirmember=false" >> "${XDG_CONFIG_HOME:-$HOME/.config}/banager/config.sh" ;; 
+                        true) echo "dirmember=true" >> "${XDG_CONFIG_HOME:-$HOME/.config}/banager/config" ;;
+                        false) echo "dirmember=false" >> "${XDG_CONFIG_HOME:-$HOME/.config}/banager/config" ;; 
                     esac
                     ;;
                 "time") 
                     case "$3" in 
-                        true) echo "time=true" >> "${XDG_CONFIG_HOME:-$HOME/.config}/banager/config.sh" ;;
-                        false) echo "time=false" >> "${XDG_CONFIG_HOME:-$HOME/.config}/banager/config.sh" ;; 
+                        true) echo "time=true" >> "${XDG_CONFIG_HOME:-$HOME/.config}/banager/config" ;;
+                        false) echo "time=false" >> "${XDG_CONFIG_HOME:-$HOME/.config}/banager/config" ;; 
                     esac
                     ;;
             esac
@@ -212,4 +212,4 @@ alias banprem='Banager -p rm'
 alias banpup='Banager -p update'
 alias banup='Banager -u'
 # shellcheck source=/dev/null
-source -- "$locate_config"/config.sh
+source -- "$locate_config"/config
