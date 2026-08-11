@@ -122,18 +122,19 @@ Banager() {
          "-p" | "--plugins")
             # TODO: Add an option to add more repos to look through
             # Also add an update option
+            # TODO: Add an option for multiple commands like -pl and -pu
             case "$2" in 
                 help | "--help") 
                     pelp 
                     shift 1
                     return 
                     ;;
-                list | "--ls" | "-l") 
+                list | "--ls") 
                     echo -e "Installed plugins are:\n$(ls "$locate_config/plugins")" 
                     shift 1
                     return
                     ;;
-                install | "--add" | "-i") 
+                install | "--add") 
                     arg="$3"
                     if [ -z "$arg" ] || [ "${arg:0:1}" = "-" ]; then 
                         echo -e "\e[31mError: No plugin after $2\e[0m"
@@ -142,16 +143,16 @@ Banager() {
                     fi
                     file="$HOME/.config/banager/plugins/$3.plugin.sh"
                     case "$3" in 
-                        *.com | *.org | *.net | *.gay | *raw*) $get "$flag" "$output$file" "$arg" ;;
+                        *.com | *.org | *raw*) $get "$flag" "$output$file" "$arg" ;;
                         *) $get "$flag" "$output$file" "https://codeberg.org/RubyRose/blugins/raw/branch/main/plugins/$arg.plugin.sh" ;;
                     esac
                     shift 2
                     ;;
-                update | "--up" | "-u" )
+                update | "--up")
                     arg="$3"
                     pudate "$arg"
                     ;;
-                uninstall | "--rm" | "-r")     
+                uninstall | "--rm")     
                     arg="$3"
                     if [ -e "${XDG_CONFIG_HOME:-$HOME/.config}/banager/plugins/$3.plugin.sh" ]; then
                         echo "Do you want to remove $3.plugin.sh? "
