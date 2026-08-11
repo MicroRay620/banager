@@ -1,26 +1,18 @@
 #!/usr/bin/env bash
-# shellcheck source=/dev/null
+# shellcheck disable=SC2154 source=/dev/null
 source -- "${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/declare.sh"
-if [ ! -e "${XDG_CACHE_HOME:-$HOME/.cache}/banager/user/enviroment.path.save.sh" ]; then
-    touch "${XDG_CACHE_HOME:-$HOME/.cache}/banager/user/enviroment.path.save.sh"
-    echo "What's your default text editor? "
-    read -r text_editor 
-    if [ "$text_editor" = "neovim" ]; then 
-        text_editor="nvim"
-    fi
-    # shellcheck disable=SC2154
-    echo -e "$bash_declare\n$bash_gen\n$dont_delete\nexport text=$text_editor" >> "${XDG_CACHE_HOME:-$HOME/.cache}/banager/user/enviroment.path.save.sh"
+source -- "${XDG_CONFIG_HOME:-$HOME/.config}/banager/config"
+if command -v "$text" &>/dev/null; then 
+    echo -e "${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/enviroment.sh: loaded config file" >> "$log_file"
+    echo -e "${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/enviroment.sh: config: text variable is valid editor" >> "$log_file"
+else
+    echo -e 
 fi
-# shellcheck source=/dev/null
-source -- "${XDG_CACHE_HOME:-$HOME/.cache}/banager/user/enviroment.path.save.sh"
 export RUST_BACKTRACE=1
 export HISTFILE=~/.bash_history
 export HISTSIZE=1000
 export HISTFILESIZE=2000
-# shellcheck disable=SC2154
 export EDITOR="$text" 
-# These are standard XDG variables
-# It's not meant to change
 export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_DATA_HOME="$HOME/.local/share"
