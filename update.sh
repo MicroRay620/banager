@@ -25,4 +25,4 @@ if [ -e "${XDG_BIN_HOME:-$HOME/.local/bin}/banager" ]; then
     cp -fr --update=all ./banager/terminal/banager "${XDG_BIN_HOME:-$HOME/bin}/banager"
     echo "Updated banager command"
 fi
-
+rm -rf banager
