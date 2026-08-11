@@ -41,6 +41,7 @@ For your commit messages, please use the first line for a brief summary what the
 - refactor: revises parts of the code
 - docs(readme): revise the [README](README.md)
 - fix: bugfix in the code base.
+- add: you made a new file 
 - ...
 
 Note that this list is not complete and there may be cases where a commit could be characterized by different types, so just try to make your best guess. This spares the maintainers a lot of work when merging your PR.
@@ -51,6 +52,7 @@ If the commit resolves an issue: add `Resolves: #xyz` where `xyz` is the issue n
 #### Signature 
 You may add a signature at the end two lines below the description or issue reference. 
 <!--TODO: Add an example to this-->
+<!-- This first needs to get an actual example of this-->
 ## Creating an Issue
 When you make an issue, follow the standard procedures outlined in the Issue tab of the repository.
 #### Issue Report
