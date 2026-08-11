@@ -119,7 +119,7 @@ Banager() {
             shift 1
             return 
             ;;
-         "--plugins")
+         "-p" | "--plugins")
             # TODO: Add an option to add more repos to look through
             # Also add an update option
             case "$2" in 
@@ -128,12 +128,12 @@ Banager() {
                     shift 1
                     return 
                     ;;
-                list | "--ls") 
+                list | "--ls" | "-l") 
                     echo -e "Installed plugins are:\n$(ls "$locate_config/plugins")" 
                     shift 1
                     return
                     ;;
-                install | add | "--add") 
+                install | "--add" | "-i") 
                     arg="$3"
                     if [ -z "$arg" ] || [ "${arg:0:1}" = "-" ]; then 
                         echo -e "\e[31mError: No plugin after $2\e[0m"
@@ -147,11 +147,11 @@ Banager() {
                     esac
                     shift 2
                     ;;
-                update | "--up" )
+                update | "--up" | "-u" )
                     arg="$3"
                     pudate "$arg"
                     ;;
-                uninstall | remove | rm | "--rm")     
+                uninstall | "--rm" | "-r")     
                     arg="$3"
                     if [ -e "${XDG_CONFIG_HOME:-$HOME/.config}/banager/plugins/$3.plugin.sh" ]; then
                         echo "Do you want to remove $3.plugin.sh? "
