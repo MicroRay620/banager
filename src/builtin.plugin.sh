@@ -17,7 +17,7 @@ if [ "$ID" = "nixos" ] || [ "$ID_LIKE" = "nixos" ] ; then
         echo "${XDG}"
         dependency=true 
     else
-        echo -e "\e[31m${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/builtin.plugin.sh: Error:BC1: blesh not installed\e[0m" >> "$log_file"
+        echo -e "\e[31m${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/builtin.plugin.sh: Error BC1: blesh not installed\e[0m" >> "$log_file"
         exit 1
     fi
 elif [ "$ID" = "archlinux" ] || [ "$ID_LIKE" = "archlinux" ]; then
