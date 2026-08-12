@@ -158,6 +158,7 @@ if [ "$correction" = "true" ]; then
                         fi
                     fi
                 fi
+                ;;
         esac
     fi
 fi
