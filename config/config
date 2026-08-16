@@ -3,10 +3,17 @@
 # Use plugins at your own risk
 # yt_alias=true
 # correction=true
-# starship=true 
-# dirmember=true  
 # time=true 
+
 # Text is for the src/enviroment.sh
 # This determines your text editor
-text="your text editor"
+text="TEXT EDITOR" # This has to be the command name
+hist_size=100000 # This has to be a whole number
+hist_file_size=1000000
 
+# This is the configuration for the builtin plugins 
+# hidden_files=on # THIS IS THE DEFAULT FOR ble.sh 
+# menu_prefix=off
+# vim=true
+# starship=true 
+# dirmember=true  
