@@ -3,19 +3,12 @@
 source -- "${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/declare.sh"
 locate_config="$XDG_CONFIG_HOME/banager"
 export bastore="$HOME/.local/share/banager/run"
-flag_num=0
-for grab in curl wget; do
-    if command -v "$grab" &>/dev/null; then 
-        get="$grab"
-        break
-    else 
-        (( flag_num += 1 ))
-    fi
-done 
-if [ "$flag_num" = 0 ]; then 
-    flag="-Lf"
+if curl &>/dev/null; then 
+    get="curl"
+    flag="-Lfo"
     output="--output "
-else 
+elif wget &>/dev/null; then 
+    get="wget"
     flag="-c4"
     output="--output-file="
 fi
