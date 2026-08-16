@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC2154 source=/dev/null
+# NOTE: These are ble.sh configuration stuff 
+shopt -u no_empty_cmd_completion
+# NOTE: This is just making the cache directory
 date=$(date +"%Y.%m.%d")
 if [ ! -e "${XDG_DATA_HOME:-$HOME/.local/share}/banager/logs/banager-$date.log" ]; then 
     touch "${XDG_DATA_HOME:-$HOME/.local/share}/banager/logs/banager-$date.log"
@@ -17,10 +20,32 @@ else
     echo -e "\e[31m${XDG_DATA_HOME:-$HOME/.local/share/}/banager/run/config.sh: Error BC1: banager command not installed\e[0m"
     exit 1
 fi
+# These are the sources that get called that banager needs to use 
+# The order that is used is 
+# → /etc
+# → /usr
+#   → /local 
+#       → /bin 
+# → ~/.local
+#   → /bin 
+#   → /state/banager 
+#   → /share/banager
+#       → /log
+#       → /run 
+#       → /src 
+# → ~/.cache/banager 
+#   → /user 
+#   → /plugins 
+# → ~/.config/banager 
+#   → /plugins
+#   → /config (FILE)
+# Each file sourced should be listed in alphabetical order 
 source -- "${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/enviroment.sh"
 source -- "${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/alias.sh"
 source -- "${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/builtin.plugin.sh"
 source -- "${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/declare.sh"
+# This is making the cache file for the log storage 
+# Currently this doesn't work and is work in progress
 if [ ! -e "${XDG_CACHE_HOME:-$HOME/.cache}/banager/user/log.storage.time.sh" ]; then
     echo "How long would you like to store the logs? (time in terms of days) "
     read -r log_store 
@@ -31,21 +56,26 @@ else
     echo "${XDG_DATA_HOME:-$HOME/.local/share}/banager/run/config.sh: log storage cache file found" >> "$log_file"
     source -- "${XDG_CACHE_HOME:-$HOME/.cache}/banager/user/log.storage.time.sh"
 fi
-config_check=$(shellcheck -x "${XDG_CONFIG_HOME:-$HOME/.config}/banager/config" &>/dev/null)
-if [ ! "$config_check" = "" ]; then 
+if shellcheck -x "${XDG_CONFIG_HOME:-$HOME/.config}/banager/config" &>/dev/null; then
     echo -e "\e[31mERROR BC3.1: config file failed shellcheck\e[0m"
     echo -e "\e[31m${XDG_CONFIG_HOME:-$HOME/.config}/banager/config: Error BC3: failed config file: failed shellcheck\e[0m" >> "$log_file"
 else
-    echo ":)"
+    find lost 
+    # TODO: Add the log integration
 fi
 # TODO: Make the log deletion logic
 source -- "${XDG_CACHE_HOME:-$HOME/.cache}/banager/user/log.storage.time.sh"
 source -- "${XDG_CONFIG_HOME:-$HOME/.config}/banager/config"
-# All of these are to abide by the XDG standard
-# For more about these please go to: https://specifications.freedesktop.org/basedir/latest/
-# NOTE: This is just making the cache directory
-if [ ! -e "${XDG_CACHE_HOME:-$HOME/.cache}/banager" ] || [ ! -e "${XDG_DATA_HOME:-$HOME/.local/share}/banager/logs" ] ; then 
-    mkdir -p "${XDG_CACHE_HOME:-$HOME/.cache}/banager/user" "${XDG_CACHE_HOME:-$HOME/.cache}/banager/plugins" "${XDG_DATA_HOME:-$HOME/.local/share}/banager/logs"
+
+# NOTE: Doing a slower method for readability
+if [ ! -e "${XDG_DATA_HOME:-HOME/.local/share}/banager/logs" ]; then 
+    mkdir -p "${XDG_DATA_HOME:-$HOME/.local/share}/banager/logs" 
+fi
+if [ ! -e "${XDG_STATE_HOME:-$HOME/.local/state}/banager" ]; then 
+    mkdir -p "${XDG_STATE_HOME:-$HOME/.local/state}/banager"
+fi
+if [ ! -e "${XDG_CACHE_HOME:-$HOME/.cache}/banager" ]; then 
+    mkdir -p "${XDG_CACHE_HOME:-$HOME/.cache}/banager/user" "${XDG_CACHE_HOME:-$HOME/.cache}/banager/plugins"
 fi
 
 # Plugins
