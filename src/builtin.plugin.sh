@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# shellcheck disable=SC2154 source=/dev/null
+# shellcheck disable=SC2005,SC2154 source=/dev/null
 # This file is for all the built-in/pre-installed plugins for banager
 # blesh is one of the few built-in banager plugins
 # What this enabled is stuff like syntax highlighting and more 
@@ -33,7 +33,7 @@ elif [ "$ID" = "archlinux" ] || [ "$ID_LIKE" = "archlinux" ]; then
         dependency=true
     fi
 else
-    if [ -e "${XDG_DATA_HOME:-$HOME/.local/share}/blesh/ble.sh" ]; then
+    if [ ! -e "${XDG_DATA_HOME:-$HOME/.local/share}/blesh/ble.sh" ]; then
         git clone --recursive --depth 1 --shallow-submodules https://github.com/akinomyoga/ble.sh.git
         make -C ble.sh install PREFIX=~/.local
     fi
@@ -45,6 +45,24 @@ if [ "$dependency" = true ]; then
     echo -e "${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/builtin.plugin.sh: Dependency Found: ble.sh" >> "$log_file"
     echo -e "${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/builtin.plugin.sh: Dependency: ble.sh: installed at $level level" >> "$log_file"
 fi
+if [ -e "$HOME/.blerc" ]; then 
+    source -- "$HOME/.blerc"
+fi
+# TODO: Add log integration
+# TODO: Fix the error with bind
+if [ "$hidden_files" = off ]; then 
+    bind 'set match-hidden-files off'
+elif [ "$hidden_files" = on ]; then
+    bind 'set match-hidden-files on'
+    # TODO: Add error handling
+fi
+if [ "$menu_prefix" = on ]; then 
+    bind 'set menu-complete-display-prefix on' 
+fi
+if [ "$vim" = true ]; then 
+    set -o vi
+fi
+
 
 if [ "$starship" = "true" ]; then 
     echo -e "${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/builtin.plugin.sh: ${XDG_CONFIG_HOME:-$HOME/.config}/banager/config 'starship' set to true"
@@ -52,7 +70,7 @@ if [ "$starship" = "true" ]; then
         echo -e "${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/builtin.plugin.sh: Config Dependency: starship: command found"
         if [ ! -e "${XDG_CACHE_HOME:-$HOME/.cache}/banager/user/starship.completion.sh" ]; then 
             touch "${XDG_CACHE_HOME:-$HOME/.cache}/banager/user/starship.completion.sh"
-            starship completions bash >> "${XDG_CACHE_HOME:-$HOME/.cache}/banager/user/starship.completion.sh"
+            echo "$(starship completions bash)" > "${XDG_CACHE_HOME:-$HOME/.cache}/banager/user/starship.completion.sh"
             source -- "${XDG_CACHE_HOME:-$HOME/.cache}/banager/user/starship.completion.sh"
             echo -e "${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/builtin.plugin.sh: Config Dependency: starship: completion did not exist: created completion file in cache"
         else 
@@ -61,7 +79,7 @@ if [ "$starship" = "true" ]; then
         fi
         if [ ! -e "${XDG_CONFIG_HOME:-$HOME/.config}/starship.toml" ]; then
             touch "${XDG_CONFIG_HOME:-$HOME/.config}/starship.toml"
-            starship preset bracketed-segments >> "${XDG_CONFIG_HOME:-$HOME/.config}/starship.toml"
+            echo "$(starship preset bracketed-segments)" >> "${XDG_CONFIG_HOME:-$HOME/.config}/starship.toml"
             echo "To change your preset for starship, either look at the starship documentation or run \`\$ starship preset\ <PRESET OPTION> >> ~/.config/starship.toml\`"
             eval "$(starship init bash)"
         else 
@@ -85,8 +103,8 @@ fi
 # command correction
 if [ "$correction" = "true" ]; then
     # TODO: add log data
-    if [ ! -e "${XDG_CACHE_HOME:-$HOME/.config}/banager/user/fix-cmd.sh" ]; then
-        touch "${XDG_CACHE_HOME:-$HOME/.config}/banager/user/fix-cmd.sh"
+    if [ ! -e "${XDG_CACHE_HOME:-$HOME/.config}/banager/user/fix.command.sh" ]; then
+        touch "${XDG_CACHE_HOME:-$HOME/.config}/banager/user/fix.command.sh"
         echo -e "Your system has a correction tool [thefuck or pay-respects] installed.\nWould you like the alias enabled? [y/N] "
         read -er alias_prompt 
         case "$alias_prompt" in 
@@ -98,19 +116,46 @@ if [ "$correction" = "true" ]; then
                     "" | *" "*) custom_alias="fuck" ;;
                 esac
                 # shellcheck disable=SC2154
-                echo -e "$bash_declare\n$bash_gen\n$dont_delete\nfix_alias=\"$custom_alias\"" >> "${XDG_CACHE_HOME:-$HOME/.config}/banager/fix-cmd.sh"
+                echo -e "$bash_declare\n$bash_gen\n$dont_delete\nfix_alias=\"$custom_alias\"" >> "${XDG_CACHE_HOME:-$HOME/.config}/banager/fix.command.sh"
                 ;;
             n | N | *no*  | *No*  | *NO* ) alias_prompt="false" ;;
         esac
         # shellcheck source=/dev/null
-        source -- "${XDG_CACHE_HOME:-$HOME/.config}/banager/user/fix-cmd.sh"
+        source -- "${XDG_CACHE_HOME:-$HOME/.config}/banager/user/fix.command.sh"
         if [ "$alias_prompt" = "true" ]; then
             alias_call="--alias \"$fix_alias\""
         else
             alias_call=""
         fi
     fi
-    if command -v thefuck &>/dev/null; then 
+    if command -v pay-respects &>/dev/null; then 
+        if [ ! -e "${XDG_CACHE_HOME:-$HOME/.cache}/banager/user/pay.plugin.user.sh" ]; then 
+            touch "${XDG_CACHE_HOME:-$HOME/.cache}/banager/user/pay.plugin.user.sh" 
+            echo "Would you like the [command not found] handler? [y/N] "
+            read -r cnf_handler
+            echo -e "$bash_declare
+            # shellcheck disable=SC2154 source=/dev/null
+            $bash_gen
+            source -- \"\${XDG_CACHE_HOME:-\$HOME/.cache}/banager/user/fix.command.sh\"" >> "${XDG_CACHE_HOME:-$HOME/.cache}/banager/user/pay.plugin.user.sh"
+            case "$cnf_handler" in 
+                y | Y) 
+                    echo "handler=true" >> "${XDG_CACHE_HOME:-$HOME/.cache}/banager/user/pay.plugin.user.sh"              
+                    handler=true
+                    ;;
+                *) 
+                    echo "handler=false" >>  "${XDG_CACHE_HOME:-$HOME/.cache}/banager/user/pay.plugin.user.sh" 
+                    handler=false
+                    ;;
+            esac
+        fi
+        source -- "${XDG_CACHE_HOME:-$HOME/.cache}/banager/user/pay.plugin.user.sh"
+        if [ "$handler" = true ]; then 
+            handle="--nocnf"
+        else
+            handle=""
+        fi
+        eval "$(pay-respects "$alias_call" "$handle" bash)"
+    elif command -v thefuck &>/dev/null; then 
         # There will be additions made to allow you make it run without needing input
         # That will be customizable
         echo "Do you want to have thefuck run automatically? [y/N] "
@@ -145,7 +190,9 @@ if [ "$correction" = "true" ]; then
         read -r correct_option
         shopt -s nocasematch
         case "$correct_option" in 
-            thefuck) $SUPER "$PKG_MGR $INSTALL" thefuck ;;
+            thefuck) 
+                $SUPER "$PKG_MGR $INSTALL" thefuck 
+                ;;
             pay-respects) 
                 if [ -e "${XDG_CONFIG_HOME:-$HOME/.config}/plugins/archlinux.plugin.sh" ]; then 
                     $AUR "$INSTALL" pay-respects 
@@ -162,4 +209,22 @@ if [ "$correction" = "true" ]; then
         esac
     fi
 fi
-
+# NOTE: ble.sh loading plugin completions 
+# NOTE: This will impact performance but it is necessary
+# NOTE: This is down here to ensure the completions of starship and everything are made before loading the completions
+# OPTIM: If you can think of a quicker way of doing this, please make a PR
+for completions in "${XDG_CACHE_HOME:-$HOME/.cache}/banager"/plugins/*.completion.sh; do
+    if [ -e "$completions" ]; then
+        echo -e "${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/builtin.plugin.sh: $completions found" >> "$log_file"
+        echo -e "${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/builtin.plugin.sh: loading $completions" >> "$log_file"
+        if [ -s "$completions" ]; then
+            echo -e "${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/builtin.plugin.sh: $completions not empty" >> "$log_file"
+            source -- "$completions"
+            echo -e "${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/builtin.plugin.sh: loaded $completions" >> "$log_file"
+        else 
+            echo -e "\e[31m${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/builtin.plugin.sh: $completions is empty\e[0m" >> "$log_file"
+        fi
+    else
+        echo -e "${XDG_DATA_HOME:-$HOME/.local/share}/banager/src/builtin.plugin.sh: $completions not found" >> "$log_file"
+    fi
+done
