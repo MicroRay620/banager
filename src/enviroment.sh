@@ -11,8 +11,8 @@ else
 fi
 export RUST_BACKTRACE=1
 export HISTFILE=~/.bash_history
-export HISTSIZE=1000
-export HISTFILESIZE=2000
+export HISTSIZE="$hist_size"
+export HISTFILESIZE="$hist_file_size"
 export EDITOR="$text" 
 export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_CONFIG_HOME="$HOME/.config"
