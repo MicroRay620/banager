@@ -22,10 +22,8 @@ else
 fi
 # These are the sources that get called that banager needs to use 
 # The order that is used is 
-# → /etc
-# → /usr
-#   → /local 
-#       → /bin 
+# → /etc/os-release # NOTE: Don't access any of the other files /etc/
+# → /usr/local/bin
 # → ~/.local
 #   → /bin 
 #   → /state/banager 
