@@ -21,7 +21,7 @@ alias shoot='$SUPER pkill'
 alias pacadd='$SUPER $PKG_MGR $INSTALL' 
 alias pacrm='$SUPER $PKG_MGR $REMOVE'
 alias pacudate='$SUPER $PKG_MGR $UPDATE'
-
+alias please='$SUPER $(fc -ln -1)'
 # These are for if you have timeshift.
 # Don't use these if you don't have timeshift
 # timeshift is a good partition backup for everything except nixos
