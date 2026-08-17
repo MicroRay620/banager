@@ -2,17 +2,19 @@
 # shellcheck disable=SC2034
 # Use plugins at your own risk
 # yt_alias=true
-# correction=true
 # time=true 
 
 # Text is for the src/enviroment.sh
 # This determines your text editor
-text="TEXT EDITOR" # This has to be the command name
+# Nano is there as it comes installed on 99% of distros
+# Change this to your preferred text editor
+text="nano" # This has to be the command name
 hist_size=100000 # This has to be a whole number
 hist_file_size=1000000
 
 # This is the configuration for the builtin plugins 
 # hidden_files=on # THIS IS THE DEFAULT FOR ble.sh 
+# correction=true
 # menu_prefix=off
 # vim=true
 # starship=true 
