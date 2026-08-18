@@ -90,8 +90,44 @@ if [ "$starship" = "true" ]; then
     fi
 fi
 if [ "$dirmember" = "true" ]; then
-    if command -v zoxide &>/dev/null; then 
-        eval "$(zoxide init bash --cmd cd)"
+    if command -v zoxide &>/dev/null; then
+        if [ ! -e "${XDG_CACHE_HOME:-$HOME/.cache}/banager/user/zoxide.configuration.sh" ]; then 
+            read -rp "Would you like zoxide to replace cd? [y/N] " zchoice
+            case "$zchoice" in
+                *n* | *N*)
+                    zchange="--no-cmd"
+                ;;
+                *y* | *Y* | *) 
+                    read -rp "Would you like [cd], [z/zi], or [j/ji]? " cmd_opt
+                    opt=true
+                    while [ "$opt" = true ]; do 
+                        case "$cmd_opt" in 
+                            cd) 
+                                cmd="cd"
+                                opt=false 
+                                ;;
+                            z | zi) 
+                                if [ "$cmd" = "zi" ]; then 
+                                    cmd="zi"
+                                else 
+                                    cmd="z"
+                                fi
+                                opt=false 
+                                ;; 
+                            j | ji) 
+                                cmd="$cmd_opt" 
+                                opt=false
+                                ;;
+                            *) echo "invalid command" ;;
+                        esac
+                    done
+                    zchange="--cmd $cmd"
+                ;;
+            esac
+            echo -e "$bash_declare\n$bash_gen\ncd_cmd=$zchange" >> "${XDG_CACHE_HOME:-$HOME/.cache}/banager/user/zoxide.configuration.sh"
+        fi
+        source -- "${XDG_CACHE_HOME:-$HOME/.cache}/banager/user/zoxide.configuration.sh"
+        eval "$(zoxide init bash "$cd_cmd")"
     else
         if [ ! "$ID" = "nixos" ] || [ ! "$ID_LIKE" = "nixos" ]; then 
             $SUPER "$PKG_MGR $INSTALL" zoxide 
